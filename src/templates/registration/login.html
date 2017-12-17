@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block styles %}<link rel="stylesheet" type="text/css" href="/static/css/login.css">{% endblock styles %}
+
+{% block content %}
+<main role="main" class="container" style="padding-top: 15px;">
+	<div class="starter-template">
+    	<div class="col-md-offset-4 col-md-3">
+			<h1 class="welcome-sign">Welcome Back!</h1>
+		</div>
+	</div>
+    {% load static %}
+	<div class="container">
+    	<div class="row">
+        	<div id="loginform" class="col-md-offset-4 col-md-3">
+        		<div style="text-align: center" class="logo-wrapper">
+        			<img src="{% static 'logos/logo.png' %}" height="35" class="login-logo">
+        		</div>
+                <form role="form" class="form-horizontal" method="post" action="{% url 'login' %}" style="margin-top: 25px;">{% csrf_token %}
+                    <div class="form-group" style="padding-left: 20px; padding-right: 20px;">
+                        <input class="form-control" id="id_username" maxlength="30" name="username"
+                                type="text" placeholder="E-mail address or username"/>
+                        <input class="form-control" id="id_password" maxlength="30" name="password"
+                               type="password" placeholder="Password" style="margin-top: 10px;"/>
+                        <div class="wrapper">
+                            <input type="submit" class="btn btn-primary" value="login"/>
+                        </div>
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    </div>
+                </form>
+                <div class="redirects">
+                    <p>Forgot your password?</p>
+                    <p>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+                </div>
+
+        	</div>
+    	</div>
+	</div>
+</main>
+{% endblock content %}

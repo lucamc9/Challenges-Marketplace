@@ -5,11 +5,13 @@
     <link rel="shortcut icon" href="/static/logos/favicon.ico"/>
     <title>Challenges Marketplace</title>
     <link rel="stylesheet" type="text/css" href="/static/css/navbar.css">
+    {% block styles %}{% endblock styles %}
     {% include 'snippets/css.html' %}
 </head>
 <body style="background-color: #3381A8">
 {% include 'snippets/navbar.html' %}
 
+{% block content %}{% endblock content %}
 
 {% include 'snippets/js.html' %}
 </body>
