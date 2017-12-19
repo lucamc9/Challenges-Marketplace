@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from .views import ProfileDetailView
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^(?P<username>[\w-]+)$', ProfileDetailView.as_view(), name='detail'),
+    url(r'^(?P<slug>[\w-]+)/$', ProfileDetailView.as_view(), name='detail'),
 ]
