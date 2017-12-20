@@ -10,8 +10,8 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 class RegisterForm(forms.ModelForm):
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
 
     class Meta:
         model = User

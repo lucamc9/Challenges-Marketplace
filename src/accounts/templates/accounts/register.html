@@ -17,16 +17,15 @@
                     <div class="form-group" style="padding-left: 20px; padding-right: 20px;">
                         <input class="form-control" id="id_email" maxlength="30" name="email"
                                 type="email" placeholder="E-mail address"/>
-                        <input class="form-control" id="id_password" maxlength="30" name="password"
+                        <input class="form-control" id="id_password" maxlength="30" name="password1"
                                type="password" placeholder="Password" style="margin-top: 10px;"/>
-                        <input class="form-control" maxlength="30" name="conf_password"
+                        <input class="form-control" maxlength="30" name="password2"
                                type="password" placeholder="Confirm Password" style="margin-top: 10px;"/>
                         <div class="wrapper">
                             <input id="register-button" type="submit" class="btn btn-primary" value="Sign Up"/>
                         </div>
                         <input type="hidden" name="next" value="{{ next }}" />
                     </div>
-                </form>
                 <div class="redirects">
                     <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
                 </div>
