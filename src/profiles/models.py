@@ -24,3 +24,22 @@ class SMEProfile(models.Model):
 
     def __str__(self):
         return self.user.__str__()
+
+class InvestorProfile(models.Model):
+    LEGAL_STRUCT, OWNERSHIP, YEAR_CHOICES, CURRENCIES, SECTOR = sme_choices()
+    DEAL_TYPE = (
+        ('e', 'Equity'),
+        ('t', 'Trade'),
+        ('d', 'Debt')
+    )
+    user = models.ForeignKey(User)
+    full_name = models.CharField(max_length=50, blank=True, null=True)
+    description = models.CharField(max_length=1500, blank=True, null=True)
+    deal = models.CharField(max_length=1, choices=DEAL_TYPE)
+    sector = models.CharField(max_length=50, choices=SECTOR)
+    avatar = models.ImageField(default="static/logos/logo.png")
+
+    def __str__(self):
+        return self.user.__str__()
+
+
