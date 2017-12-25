@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'profiles',
-    'accounts'
+    'accounts',
+    'django_countries',
+    'djmoney'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'  # changes the built-in user model to ours
