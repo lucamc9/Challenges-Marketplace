@@ -3,6 +3,6 @@ from .views import ProfileDetailView
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^(?P<slug>[\w-]+)/$', ProfileDetailView.as_view(), name='detail'),
-    url(r'^$', TemplateView.as_view(template_name='profiles/user.html'), name='user')
+    url(r'^$', ProfileDetailView.as_view(), name='detail'),
+    #url(r'^$', TemplateView.as_view(template_name='profiles/user.html'), name='user')
 ]
