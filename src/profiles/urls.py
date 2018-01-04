@@ -1,8 +1,14 @@
 from django.conf.urls import url
-from .views import ProfileDetailView
-from django.views.generic import TemplateView
+from .views import (
+    ProfileListView,
+    ProfileDetailView,
+    ProfileCreateView,
+    ProfileUpdateView
+)
 
 urlpatterns = [
-    url(r'^$', ProfileDetailView.as_view(), name='detail'),
-    #url(r'^$', TemplateView.as_view(template_name='profiles/user.html'), name='user')
+    url(r'^$', ProfileListView.as_view(), name='list'),
+    url(r'^create/$', ProfileCreateView.as_view(), name='create'),
+    url(r'^(?P<pk>\d+)/update/$', ProfileUpdateView.as_view(), name='update'),
+    url(r'^(?P<pk>\d+)/$', ProfileDetailView.as_view(), name='detail'),
 ]

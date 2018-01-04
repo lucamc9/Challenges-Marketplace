@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block styles %}<link rel="stylesheet" type="text/css" href="/static/css/profiles.css">{% endblock styles %}
+
+{% block content %}
+
+<main role="main" class="container" >
+    	<div class="row">
+        	<div id="logpos" class="col-xs-offset-5 col-xs-2">
+        		<div style="text-align: center" class="logo-wrapper">
+        			<img src="{{ object.get_avatar }}" height="35" class="login-logo">
+        		</div>
+        	</div>
+	   </div>
+     <div class="row">
+      <div id="description" class="col-xs-offset-2 col-xs-8">
+        <p style="padding: 5px;">{{ object.get_description }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div id="about" class="col-xs-offset-2 col-xs-8">
+        <div class="row">
+          <div id="section1" class="col-xs-5">
+            <p><b>Email:</b> {{ object.user }} </p>
+
+            <p><b>Linked-In URL:</b> {{ object.get_lkin_urls }}</p>
+
+            <p><b>Country:</b> {{ object.get_country }}</p>
+
+            <p><b>Legal Structure:</b> {{ object.get_legal_struct }}</p>
+        </div>
+          <div id="section2" class="col-xs-offset-2 col-xs-5">
+            <p><b>Year Founded:</b> {{ object.get_year }}</p>
+
+            <p><b>Local Currency:</b> {{ object.get_currency}}</p>
+
+            <p><b>Sector:</b> {{ object.get_sector }}</p>
+
+            <p><b>Ownership:</b> {{ object.get_ownership }}</p>
+        </div>
+      </div>
+    </div>
+    </div>
+</main>
+{% endblock %}
