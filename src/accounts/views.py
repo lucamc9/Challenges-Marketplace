@@ -8,7 +8,7 @@ from .forms import LoginForm, RegisterForm
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = "accounts/register.html"
-    success_url = '/'
+    success_url = '/profile/create'
 
 class LoginView(FormView):
     form_class = LoginForm

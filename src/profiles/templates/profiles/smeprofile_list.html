@@ -8,7 +8,7 @@
 <ul>
 {% for obj in object_list %}
     <li><a href='{{ obj.get_absolute_url }}'>{{ obj.user }}</a><br/>
-            <p><b>Email:</b> {{obj.get_description}} </p>
+            <p><b>Email:</b> {{obj.user }} </p>
 
             <p><b>Linked-In URL:</b> https://www.manager-lkin.com</p>
 
@@ -18,9 +18,9 @@
     </li>
     {% empty %}
     <li><a href='{% url "profiles:create" %}'>Add Menu Item</a></li>
+    {% endfor %}
 </ul>
 </div>
 </div>
-{% endfor %}
-</ul>
+
 {% endblock %}

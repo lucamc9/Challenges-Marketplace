@@ -44,7 +44,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
-    active = models.BooleanField(default=False)  # can login
+    active = models.BooleanField(default=True)  # can login
     staff = models.BooleanField(default=False) # staff non-superuser
     admin = models.BooleanField(default=False) # superuser
     investor = models.BooleanField(default=False) # for investors
