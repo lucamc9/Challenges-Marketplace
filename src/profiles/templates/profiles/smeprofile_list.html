@@ -10,11 +10,11 @@
     <li><a href='{{ obj.get_absolute_url }}'>{{ obj.user }}</a><br/>
             <p><b>Email:</b> {{obj.user }} </p>
 
-            <p><b>Linked-In URL:</b> https://www.manager-lkin.com</p>
+            <p><b>Linked-In URL:</b> {{ obj.get_lkin_urls }}</p>
 
-            <p><b>Country:</b> Zambia </p>
+            <p><b>Country:</b> {{ obj.get_country }} </p>
 
-            <p><b>Legal Structure:</b> Limited Liability Company</p>
+            <p><b>Legal Structure:</b> {{ obj.get_legal_struct }}</p>
     </li>
     {% empty %}
     <li><a href='{% url "profiles:create" %}'>Add Menu Item</a></li>

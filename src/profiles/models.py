@@ -5,6 +5,7 @@ from django_countries.fields import CountryField
 from .utils import sme_choices
 import datetime
 from django.core.urlresolvers import reverse
+from .utils import unique_slug_generator
 
 User = settings.AUTH_USER_MODEL
 
@@ -21,18 +22,22 @@ class SMEProfile(models.Model):
     currency = models.CharField(max_length=50, choices=CURRENCIES)
     lkin_urls = models.URLField(max_length=200, blank=True, null=True)
     sector = models.CharField(max_length=50, choices=SECTOR)
-    avatar = models.ImageField(default="static/logos/logo-white.png")
+    avatar = models.ImageField(upload_to='pictures/', default='pictures/logo-white.png')
+    slug = models.SlugField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def get_absolute_url(self):
-        return reverse('profiles:detail', kwargs={'pk': self.pk})
+        return reverse('profiles:detail', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['-updated', '-timestamp']
 
     def __str__(self):
         return self.user.__str__()
+
+    def get_user(self):
+        return self.user
 
     def get_description(self):
         return self.description
@@ -64,9 +69,9 @@ class SMEProfile(models.Model):
 class InvestorProfile(models.Model):
     LEGAL_STRUCT, OWNERSHIP, YEAR_CHOICES, CURRENCIES, SECTOR = sme_choices()
     DEAL_TYPE = (
-        ('Equity', 'Equity'),
-        ('Trade', 'Trade'),
-        ('Debt', 'Debt')
+        ('e', 'Equity'),
+        ('t', 'Trade'),
+        ('d', 'Debt')
     )
     user = models.ForeignKey(User)
     full_name = models.CharField(max_length=50, blank=True, null=True)
@@ -74,6 +79,7 @@ class InvestorProfile(models.Model):
     deal = models.CharField(max_length=1, choices=DEAL_TYPE)
     sector = models.CharField(max_length=50, choices=SECTOR)
     avatar = models.ImageField(default="static/logos/logo-white.png")
+    slug = models.SlugField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -82,6 +88,9 @@ class InvestorProfile(models.Model):
 
     def __str__(self):
         return self.user.__str__()
+
+    def get_user(self):
+        return self.user
 
     def get_full_name(self):
         return self.full_name
@@ -98,5 +107,12 @@ class InvestorProfile(models.Model):
     def get_avatar(self):
         return self.avatar
 
+def pre_save_receiver(sender, instance, *args, **kwargs):
+    # Make a slug out of the user's email for the specific profile
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(pre_save_receiver, sender=SMEProfile)
+pre_save.connect(pre_save_receiver, sender=InvestorProfile)
 
 

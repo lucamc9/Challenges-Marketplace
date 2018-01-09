@@ -1,10 +1,5 @@
 from django.db import models
-from django import forms
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.core.urlresolvers import reverse
-from django.db.models.signals import pre_save, post_save
-from .utils import unique_slug_generator
-
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, is_active=True, is_staff=False, is_admin=False,
@@ -50,7 +45,6 @@ class User(AbstractBaseUser):
     investor = models.BooleanField(default=False) # for investors
     sme = models.BooleanField(default=False) # for smes
     timestamp = models.DateTimeField(auto_now_add=True)
-    slug = models.SlugField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -72,9 +66,6 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    def get_absolute_url(self): # get_absolute_url
-        return reverse('profiles:detail', kwargs={'slug': self.slug})
-
     @property
     def is_staff(self):
         return self.staff
@@ -94,11 +85,5 @@ class User(AbstractBaseUser):
     @property
     def is_sme(self):
         return self.sme
-
-def rl_pre_save_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-
-pre_save.connect(rl_pre_save_receiver, sender=User)
 
 

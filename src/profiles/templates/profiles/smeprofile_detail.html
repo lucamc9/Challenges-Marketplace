@@ -25,18 +25,18 @@
 
             <p><b>Linked-In URL:</b> {{ object.get_lkin_urls }}</p>
 
-            <p><b>Country:</b> {{ object.get_country }}</p>
+            <p><b>Country:</b> {{ object.get_country_display }}</p>
 
-            <p><b>Legal Structure:</b> {{ object.get_legal_struct }}</p>
+            <p><b>Legal Structure:</b> {{ object.get_legal_struct_display }}</p>
         </div>
           <div id="section2" class="col-xs-offset-2 col-xs-5">
-            <p><b>Year Founded:</b> {{ object.get_year }}</p>
+            <p><b>Year Founded:</b> {{ object.get_year_display }}</p>
 
-            <p><b>Local Currency:</b> {{ object.get_currency}}</p>
+            <p><b>Local Currency:</b> {{ object.get_currency_display }} </p>
 
-            <p><b>Sector:</b> {{ object.get_sector }}</p>
+            <p><b>Sector:</b> {{ object.get_sector_display }}</p>
 
-            <p><b>Ownership:</b> {{ object.get_ownership }}</p>
+            <p><b>Ownership:</b> {{ object.get_ownership_display }}</p>
         </div>
       </div>
     </div>
