@@ -1,0 +1,48 @@
+{% extends "base_white.html" %}
+
+{% block styles %}<link rel="stylesheet" type="text/css" href="/static/css/businessplan_detail.css">{% endblock styles %}
+
+{% block content %}
+{% load static %}
+<main role="main" class="container-fluid">
+	<div class="row">
+		<div class="col-xs-2">
+			<div class="nav-buttons" style="margin-top:80px;">
+				<button class="button standard">Data Room</button>
+				<button class="button highlighted">Business Plan</button>
+				<button class="button standard">Diagnostics</button>
+				<button class="button standard">KPI</button>
+				<button class="button standard">Due Diligence</button>
+				<button class="button standard">Bespoke Questionnaire</button>
+			</div>
+		</div>
+		<div class="col-xs-8">
+			<h1 class="h1 title"> <b>Business Plan</b> </h1>
+            <p class="question">Business model</p>
+            <p class="response">{{ object.model }}</p>
+            <p class="question">Qualifications held</p>
+            <p class="response">{{ object.qualifications }}</p>
+            <p class="question">Exit strategy</p>
+            <p class="response">{{ object.exit }}</p>
+            <p class="question">Business Summary</p>
+            <p class="response">{{ object.summary }}</p>
+            <p class="question">Competitors</p>
+            <p class="response">{{ object.competitors }}</p>
+            <p class="question">Current or potential customers</p>
+            <p class="response">{{ object.customers }}</p>
+            <p class="question">Potential market size</p>
+            <p class="response">{{ object.market }}</p>
+            <p class="question">Customer problem we are trying to solve</p>
+            <p class="response">{{ object.problem }}</p>
+            <p class="question">Our solution</p>
+            <p class="response">{{ object.solution }}</p>
+            <p class="question">“Go-to-market” and sales strategy</p>
+            <p class="response">{{ object.strategy }}</p>
+            <p class="question">Competitive advantage and barriers to entry</p>
+            <p class="response">{{ object.advantages }}</p>
+            <p class="question">Financials – revenues, expenditures and net income for last 2 years and next 3 years projected</p>
+            <p class="response">{{ object.financials }}</p>
+		</div>
+	</div>
+</main>
+{% endblock content %}

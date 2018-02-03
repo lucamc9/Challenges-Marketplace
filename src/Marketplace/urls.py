@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.views.generic import TemplateView
 from accounts.views import RegisterView, LoginView
+from businessplan.views import InfoView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,5 +28,12 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
+    url(r'^info/$', InfoView.as_view(), name='info'),
     url(r'^profile/', include('profiles.urls', namespace='profiles')),
+    url(r'^businessplan/', include('businessplan.urls', namespace='businessplan')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'profiles',
     'accounts',
     'django_countries',
-    'djmoney'
+    'djmoney',
+    'diagnostics',
+    'businessplan',
+    'widget_tweaks'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'  # changes the built-in user model to ours
@@ -125,6 +128,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
