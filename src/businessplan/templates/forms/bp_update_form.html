@@ -3,7 +3,6 @@
 {% block styles %}<link rel="stylesheet" type="text/css" href="/static/css/businessplan_create.css">{% endblock styles %}
 
 {% block content %}
-{% load static %}
 {% if form.errors.non_field_errors %}
 {{ form.errors.non_field_errors }}
 {% endif %}
@@ -23,7 +22,7 @@
 			<h1 class="h1 title"> <b>Business Plan</b> </h1>
             {% load widget_tweaks %}
 
-            <form method="post" enctype='multipart/form-data' novalidate>
+            <form method="post" novalidate>
               {% csrf_token %}
 
               {% if form.non_field_errors %}
@@ -49,11 +48,6 @@
                     {% else %}
                       {% render_field field class="form-control is-valid" %}
                     {% endif %}
-                  {% elif "Upload your business plan" in field.label_tag or "Financials" in field.label_tag %}
-                    <!--<div>
-                        <input id="image" type="image" src="{% static 'icons/document-upload.png' %}" height="30">
-                    </div>-->
-                    {% render_field field class="form-control-file" %}
                   {% else %}
                     {% render_field field class="form-control" %}
                   {% endif %}

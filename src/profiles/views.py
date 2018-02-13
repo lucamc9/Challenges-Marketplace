@@ -15,9 +15,8 @@ class ProfileDetailView(DetailView):
         return SMEProfile.objects.filter(user=self.request.user)
 
 class ProfileCreateView(LoginRequiredMixin, CreateView):
-    template_name = 'forms/bp_create_form.html'
+    template_name = 'forms/create_form.html'
     form_class = SMEForm
-    success_url = '/profile/'
 
     def get_queryset(self):
         return SMEProfile.objects.filter(user=self.request.user)

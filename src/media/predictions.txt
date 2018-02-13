@@ -1,0 +1,21 @@
+Design: 2-4 hr
+Front-end: 3-5 hr
+Back-end: 3-8 hr
+Debug time: 2-5 hr
+Total per page: 10-22 hr
+
+At 15hr a week
+
+Expected number of pages: 30-50
+
+for 13 pages:
+* 4 - 40 hr
+** 7 - 112 hr
+*** 1 - 22 hr
+
+40 + 112 + 22 = 174 hr
+174/15/4 = 2.9 months
+
+Minimum = 13 * 10 / 15/4 = 2.16 months (with Brent: 1.08 - 1.62 months)
+Maximum = 13 * 22 / 15/4 = 4.76 months (with Brent: 2.38 - 3.57 months)
+Realistically = 2.9 months (with Brent: 1.45 - 2.17 months)

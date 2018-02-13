@@ -1,6 +1,6 @@
 {% extends "base_white.html" %}
 
-{% block styles %}<link rel="stylesheet" type="text/css" href="/static/css/businessplan_detail.css">{% endblock styles %}
+{% block styles %}<link rel="stylesheet" type="text/css" href="/static/css/businessplan_create.css">{% endblock styles %}
 
 {% block content %}
 {% load static %}
@@ -9,12 +9,18 @@
 		<div class="col-xs-2">
 			<div class="nav-buttons" style="margin-top:80px;">
 				<button class="button standard">Data Room</button>
-				<button class="button standard">Business Plan</button>
+				<form action="{{ bp.get_absolute_url }}">
+					<button class="button standard" type="submit">Business Plan</button>
+				</form>
 				<button class="button standard">Diagnostics</button>
 				<button class="button standard">KPI</button>
 				<button class="button standard">Due Diligence</button>
 				<button class="button standard">Bespoke Questionnaire</button>
 			</div>
+		</div>
+		<div class="col-xs-8">
+			<h1 class="h1 title"> <b>My Information</b> </h1>
+			<p>Here you'll be able to find all the information we can keep and display for you to engage with investors.</p>
 		</div>
 	</div>
 </main>
