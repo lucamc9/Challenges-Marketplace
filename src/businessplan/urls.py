@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^$', BusinessPlanCreateView.as_view(), name='create'),
     url(r'^(?P<slug>[\w-]+)/update/$', BusinessPlanUpdateView.as_view(), name='update'),
     url(r'^(?P<slug>[\w-]+)/$', BusinessPlanDetailView.as_view(), name='detail'),
-    url(r'^download/(?P<path>.*)$', download)
+    #url(r'^download/(?P<path>.*)$', download)
 ]

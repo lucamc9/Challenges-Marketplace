@@ -11,8 +11,8 @@ class DiagnosticsDetailView(DetailView):
         return Diagnostics.objects.filter(user=self.request.user)
 
 class DiagnosticsCreateView(LoginRequiredMixin, CreateView):
-    template_name = 'forms/bp_create_form.html'
-    form_class = Diagnostics
+    template_name = 'forms/diag_create_form.html'
+    form_class = DiagnosticsForm
 
     def get_queryset(self):
         return Diagnostics.objects.filter(user=self.request.user)
@@ -24,17 +24,17 @@ class DiagnosticsCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(DiagnosticsCreateView, self).get_context_data(*args, **kwargs)
-        context['title'] = "Create a business plan"
+        context['title'] = "Create Diagnostics"
         return context
 
-class DiagnosticsUpdateView(LoginRequiredMixin, UpdateView):
-    template_name = 'forms/bp_update_form.html'
-    form_class = Diagnostics
-
-    def get_queryset(self):
-        return Diagnostics.objects.filter(user=self.request.user)
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(BusinessPlanUpdateView, self).get_context_data(*args, **kwargs)
-        context['title'] = "Update Business Plan"
-        return context
+# class DiagnosticsUpdateView(LoginRequiredMixin, UpdateView):
+#     template_name = 'forms/diag_update_form.html'
+#     form_class = Diagnostics
+#
+#     def get_queryset(self):
+#         return Diagnostics.objects.filter(user=self.request.user)
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(DiagnosticsUpdateView, self).get_context_data(*args, **kwargs)
+#         context['title'] = "Update Diagnostics"
+#         return context

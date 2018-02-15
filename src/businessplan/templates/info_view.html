@@ -12,7 +12,15 @@
 				<form action="{{ bp.get_absolute_url }}">
 					<button class="button standard" type="submit">Business Plan</button>
 				</form>
-				<button class="button standard">Diagnostics</button>
+				{% if diag is not None %}
+					<form action="{{ diag.get_absolute_url }}">
+						<button class="button standard" type="submit">Diagnostics</button>
+					</form>
+				{% else %}
+					<form action="/diagnostics/">
+						<button class="button standard" type="submit">Diagnostics</button>
+					</form>
+				{% endif %}
 				<button class="button standard">KPI</button>
 				<button class="button standard">Due Diligence</button>
 				<button class="button standard">Bespoke Questionnaire</button>

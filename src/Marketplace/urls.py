@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^info/$', InfoView.as_view(), name='info'),
     url(r'^profile/', include('profiles.urls', namespace='profiles')),
     url(r'^businessplan/', include('businessplan.urls', namespace='businessplan')),
+    url(r'^diagnostics/', include('diagnostics.urls', namespace='diagnostics')),
 ]
 
 if settings.DEBUG:

@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Diagnostics, DiagnosticsQuestionnaire
 
-# Register your models here.
+admin.site.register(Diagnostics)
+admin.site.register(DiagnosticsQuestionnaire)
+

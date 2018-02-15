@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.views.generic import DetailView, CreateView, UpdateView, TemplateView
 from .forms import BusinessPlanForm
 from .models import BusinessPlan
+from diagnostics.models import Diagnostics
 from django.contrib.auth.mixins import LoginRequiredMixin
 import os
 from django.conf import settings
@@ -50,11 +51,18 @@ class InfoView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(InfoView, self).get_context_data(*args, **kwargs)
-        bp = BusinessPlan.objects.get(user=self.request.user)
-        context['bp'] = bp
+        try:
+            bp = BusinessPlan.objects.get(user=self.request.user)
+            context['bp'] = bp
+        except BusinessPlan.DoesNotExist:
+            context['bp'] = None
+        try:
+            diag = Diagnostics.objects.get(user=self.request.user)
+            context['diag'] = diag
+        except Diagnostics.DoesNotExist:
+            context['diag'] = None
+
         return context
-
-
 
 def download(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)
