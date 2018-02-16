@@ -1,0 +1,16 @@
+<div class="nav-buttons" style="margin-top:80px;">
+    <button class="button standard">Data Room</button>
+    <button class="button highlighted">Business Plan</button>
+    {% if diag is not None %}
+        <form action="{{ diag.get_absolute_url }}">
+            <button class="button standard" type="submit">Diagnostics</button>
+        </form>
+    {% else %}
+        <form action="/diagnostics/">
+            <button class="button standard" type="submit">Diagnostics</button>
+        </form>
+    {% endif %}
+    <button class="button standard">KPI</button>
+    <button class="button standard">Due Diligence</button>
+    <button class="button standard">Bespoke Questionnaire</button>
+</div>

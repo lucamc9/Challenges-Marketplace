@@ -9,9 +9,15 @@
 		<div class="col-xs-2">
 			<div class="nav-buttons" style="margin-top:80px;">
 				<button class="button standard">Data Room</button>
-				<form action="{{ bp.get_absolute_url }}">
-					<button class="button standard" type="submit">Business Plan</button>
-				</form>
+				{% if bp is not None %}
+					<form action="{{ bp.get_absolute_url }}">
+						<button class="button standard" type="submit">Business Plan</button>
+					</form>
+				{% else %}
+					<form action="/businessplan/">
+						<button class="button standard" type="submit">Business Plan</button>
+					</form>
+				{% endif %}
 				{% if diag is not None %}
 					<form action="{{ diag.get_absolute_url }}">
 						<button class="button standard" type="submit">Diagnostics</button>

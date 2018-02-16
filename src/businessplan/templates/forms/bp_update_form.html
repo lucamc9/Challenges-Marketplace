@@ -9,14 +9,7 @@
 <main role="main" class="container-fluid">
 	<div class="row">
 		<div class="col-xs-2">
-			<div class="nav-buttons" style="margin-top:80px;">
-				<button class="button standard">Data Room</button>
-				<button class="button highlighted">Business Plan</button>
-				<button class="button standard">Diagnostics</button>
-				<button class="button standard">KPI</button>
-				<button class="button standard">Due Diligence</button>
-				<button class="button standard">Bespoke Questionnaire</button>
-			</div>
+            {% include 'bp_buttons.html' %}
 		</div>
 		<div class="col-xs-8">
 			<h1 class="h1 title"> <b>Business Plan</b> </h1>
@@ -48,6 +41,8 @@
                     {% else %}
                       {% render_field field class="form-control is-valid" %}
                     {% endif %}
+                  {% elif "Upload your business plan" in field.label_tag or "Financials" in field.label_tag %}
+                    {% render_field field class="form-control-file" %}
                   {% else %}
                     {% render_field field class="form-control" %}
                   {% endif %}

@@ -1,0 +1,16 @@
+<div class="nav-buttons" style="margin-top:80px;">
+    <button class="button standard">Data Room</button>
+    {% if bp is not None %}
+        <form action="{{ bp.get_absolute_url }}">
+            <button class="button standard" type="submit">Business Plan</button>
+        </form>
+    {% else %}
+        <form action="/businessplan/">
+            <button class="button standard" type="submit">Business Plan</button>
+        </form>
+    {% endif %}
+    <button class="button highlighted">Diagnostics</button>
+    <button class="button standard">KPI</button>
+    <button class="button standard">Due Diligence</button>
+    <button class="button standard">Bespoke Questionnaire</button>
+</div>

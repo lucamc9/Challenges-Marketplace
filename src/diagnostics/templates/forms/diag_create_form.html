@@ -10,20 +10,13 @@
 <main role="main" class="container-fluid">
 	<div class="row">
 		<div class="col-xs-2">
-			<div class="nav-buttons" style="margin-top:80px;">
-				<button class="button standard">Data Room</button>
-				<button class="button standard">Business Plan</button>
-				<button class="button highlighted">Diagnostics</button>
-				<button class="button standard">KPI</button>
-				<button class="button standard">Due Diligence</button>
-				<button class="button standard">Bespoke Questionnaire</button>
-			</div>
+            {% include 'diag_buttons.html' %}
 		</div>
 		<div class="col-xs-8">
 			<h1 class="h1 title"> <b>Diagnostics</b> </h1>
             {% load widget_tweaks %}
 
-            <form method="post" novalidate>
+            <form method="post" class="questionnaire" novalidate>
               {% csrf_token %}
 
               {% if form.non_field_errors %}

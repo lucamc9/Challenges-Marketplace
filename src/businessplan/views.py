@@ -14,6 +14,15 @@ class BusinessPlanDetailView(DetailView):
     def get_queryset(self):
         return BusinessPlan.objects.filter(user=self.request.user)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(BusinessPlanDetailView, self).get_context_data(*args, **kwargs)
+        try:
+            diag = Diagnostics.objects.get(user=self.request.user)
+            context['diag'] = diag
+        except Diagnostics.DoesNotExist:
+            context['diag'] = None
+        return context
+
 class BusinessPlanCreateView(LoginRequiredMixin, CreateView):
     template_name = 'forms/bp_create_form.html'
     form_class = BusinessPlanForm
@@ -29,6 +38,11 @@ class BusinessPlanCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanCreateView, self).get_context_data(*args, **kwargs)
         context['title'] = "Create a business plan"
+        try:
+            diag = Diagnostics.objects.get(user=self.request.user)
+            context['diag'] = diag
+        except Diagnostics.DoesNotExist:
+            context['diag'] = None
         return context
 
 class BusinessPlanUpdateView(LoginRequiredMixin, UpdateView):
@@ -41,6 +55,11 @@ class BusinessPlanUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanUpdateView, self).get_context_data(*args, **kwargs)
         context['title'] = "Update Business Plan"
+        try:
+            diag = Diagnostics.objects.get(user=self.request.user)
+            context['diag'] = diag
+        except Diagnostics.DoesNotExist:
+            context['diag'] = None
         return context
 
 class InfoView(LoginRequiredMixin, TemplateView):

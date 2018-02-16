@@ -3,95 +3,10 @@ from django.conf import settings
 from django.db.models.signals import pre_save, post_save
 from profiles.utils import unique_slug_generator
 from django.core.urlresolvers import reverse
-from django import forms
-from django.core import checks, exceptions, validators
-from django.db import connection, connections, router
-from django.utils.functional import Promise, cached_property, curry
+from .utils import get_organisation_questions
 
 
 User = settings.AUTH_USER_MODEL
-
-# class IntegerRadioField(models.IntegerField):
-#     description = "Integer with Radio widget"
-#
-#     def get_internal_type(self):
-#         return "IntegerRadioField"
-#
-#     def formfield(self, **kwargs):
-#         defaults = {'form_class': forms.ChoiceField(widget=forms.RadioSelect)}
-#         defaults.update(kwargs)
-#         return super(IntegerRadioField, self).formfield(**defaults)
-
-# class IntegerRadioField(models.Field):
-#     empty_strings_allowed = False
-#     # default_error_messages = {
-#     #     'invalid': _("'%(value)s' value must be an integer."),
-#     # }
-#     description = "Integer Radio Field"
-#
-#     def check(self, **kwargs):
-#         errors = super(IntegerRadioField, self).check(**kwargs)
-#         errors.extend(self._check_max_length_warning())
-#         return errors
-#
-#     def _check_max_length_warning(self):
-#         if self.max_length is not None:
-#             return [
-#                 checks.Warning(
-#                     "'max_length' is ignored when used with IntegerField",
-#                     hint="Remove 'max_length' from field",
-#                     obj=self,
-#                     id='fields.W122',
-#                 )
-#             ]
-#         return []
-#
-#     @cached_property
-#     def validators(self):
-#         # These validators can't be added at field initialization time since
-#         # they're based on values retrieved from `connection`.
-#         validators_ = super(IntegerRadioField, self).validators
-#         internal_type = self.get_internal_type()
-#         min_value, max_value = connection.ops.integer_field_range(internal_type)
-#         if min_value is not None:
-#             for validator in validators_:
-#                 if isinstance(validator, validators.MinValueValidator) and validator.limit_value >= min_value:
-#                     break
-#             else:
-#                 validators_.append(validators.MinValueValidator(min_value))
-#         if max_value is not None:
-#             for validator in validators_:
-#                 if isinstance(validator, validators.MaxValueValidator) and validator.limit_value <= max_value:
-#                     break
-#             else:
-#                 validators_.append(validators.MaxValueValidator(max_value))
-#         return validators_
-#
-#     def get_prep_value(self, value):
-#         value = super(IntegerRadioField, self).get_prep_value(value)
-#         if value is None:
-#             return None
-#         return int(value)
-#
-#     def get_internal_type(self):
-#         return "IntegerRadioField"
-#
-#     def to_python(self, value):
-#         if value is None:
-#             return value
-#         try:
-#             return int(value)
-#         except (TypeError, ValueError):
-#             raise exceptions.ValidationError(
-#                 self.error_messages['invalid'],
-#                 code='invalid',
-#                 params={'value': value},
-#             )
-#
-#     def formfield(self, **kwargs):
-#         defaults = {'form_class': forms.ChoiceField(widget=forms.RadioSelect())}
-#         defaults.update(kwargs)
-#         return super(IntegerRadioField, self).formfield(**defaults)
 
 class Diagnostics(models.Model):
     user = models.ForeignKey(User)
@@ -153,16 +68,30 @@ class Diagnostics(models.Model):
         return self.legal
 
 class DiagnosticsQuestionnaire(models.Model):
-    ORG = (
-        (1, 'Equity'),
-        (2, 'Trade'),
-        (3, 'Debt')
-    )
+    # Retrieve questions
+    _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15 = get_organisation_questions()
+    # Standard models
     user = models.ForeignKey(User)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    organisation = models.IntegerField(choices=ORG, default=0)
-    leadership = models.IntegerField(null=True, blank=True)
+    # Organisation questions
+    org_1 = models.IntegerField(choices=_1, default=1)
+    org_2 = models.IntegerField(choices=_2, default=1)
+    org_3 = models.IntegerField(choices=_3, default=1)
+    org_4 = models.IntegerField(choices=_4, default=1)
+    org_5 = models.IntegerField(choices=_5, default=1)
+    org_6 = models.IntegerField(choices=_6, default=1)
+    org_7 = models.IntegerField(choices=_7, default=1)
+    org_8 = models.IntegerField(choices=_8, default=1)
+    org_9 = models.IntegerField(choices=_9, default=1)
+    org_10 = models.IntegerField(choices=_10, default=1)
+    org_11 = models.IntegerField(choices=_11, default=1)
+    org_12 = models.IntegerField(choices=_12, default=1)
+    org_13 = models.IntegerField(choices=_13, default=1)
+    org_14 = models.IntegerField(choices=_14, default=1)
+    org_15 = models.IntegerField(choices=_15, default=1)
+    orgs = [org_1, org_2, org_3, org_4, org_5, org_6, org_7, org_8, org_9, org_10, org_11, org_12, org_13, org_14, org_15]
+    # Leadership questions
 
     class Meta:
         ordering = ['-updated', '-timestamp']
@@ -174,10 +103,8 @@ class DiagnosticsQuestionnaire(models.Model):
         return self.user
 
     def get_organisation(self):
-        return self.organisation
+        return self.orgs
 
-    def get_leadership(self):
-        return self.leadership
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
