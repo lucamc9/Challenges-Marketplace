@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.views.generic import DetailView, CreateView, UpdateView, TemplateView
 from .forms import BusinessPlanForm
 from .models import BusinessPlan
+from .utils import try_get_context
 from diagnostics.models import Diagnostics
 from django.contrib.auth.mixins import LoginRequiredMixin
 import os
@@ -16,12 +17,8 @@ class BusinessPlanDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanDetailView, self).get_context_data(*args, **kwargs)
-        try:
-            diag = Diagnostics.objects.get(user=self.request.user)
-            context['diag'] = diag
-        except Diagnostics.DoesNotExist:
-            context['diag'] = None
-        return context
+        full_context = try_get_context(context, self.request.user)
+        return full_context
 
 class BusinessPlanCreateView(LoginRequiredMixin, CreateView):
     template_name = 'forms/bp_create_form.html'
@@ -38,12 +35,8 @@ class BusinessPlanCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanCreateView, self).get_context_data(*args, **kwargs)
         context['title'] = "Create a business plan"
-        try:
-            diag = Diagnostics.objects.get(user=self.request.user)
-            context['diag'] = diag
-        except Diagnostics.DoesNotExist:
-            context['diag'] = None
-        return context
+        full_context = try_get_context(context, self.request.user)
+        return full_context
 
 class BusinessPlanUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'forms/bp_update_form.html'
@@ -55,12 +48,8 @@ class BusinessPlanUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanUpdateView, self).get_context_data(*args, **kwargs)
         context['title'] = "Update Business Plan"
-        try:
-            diag = Diagnostics.objects.get(user=self.request.user)
-            context['diag'] = diag
-        except Diagnostics.DoesNotExist:
-            context['diag'] = None
-        return context
+        full_context = try_get_context(context, self.request.user)
+        return full_context
 
 class InfoView(LoginRequiredMixin, TemplateView):
     template_name = 'info_view.html'
@@ -70,18 +59,8 @@ class InfoView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(InfoView, self).get_context_data(*args, **kwargs)
-        try:
-            bp = BusinessPlan.objects.get(user=self.request.user)
-            context['bp'] = bp
-        except BusinessPlan.DoesNotExist:
-            context['bp'] = None
-        try:
-            diag = Diagnostics.objects.get(user=self.request.user)
-            context['diag'] = diag
-        except Diagnostics.DoesNotExist:
-            context['diag'] = None
-
-        return context
+        full_context = try_get_context(context, self.request.user)
+        return full_context
 
 def download(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)

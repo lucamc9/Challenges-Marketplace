@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import logout
 from django.views.generic import TemplateView
 from accounts.views import RegisterView, LoginView
 from businessplan.views import InfoView
@@ -24,9 +24,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='base.html'), name='base'),
+    url(r'^$', TemplateView.as_view(template_name='base_home.html'), name='base_home'),
     url(r'^login/$', LoginView.as_view(), name='login'),
-    url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^logout/$', logout, {'next_page': '/login/'}, name='logout'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
     url(r'^info/$', InfoView.as_view(), name='info'),
     url(r'^profile/', include('profiles.urls', namespace='profiles')),

@@ -4,6 +4,7 @@ from .forms import DiagnosticsForm
 from .models import Diagnostics
 from django.contrib.auth.mixins import LoginRequiredMixin
 from businessplan.models import BusinessPlan
+from businessplan.utils import try_get_context
 
 User = get_user_model()
 
@@ -26,12 +27,8 @@ class DiagnosticsCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, *args, **kwargs):
         context = super(DiagnosticsCreateView, self).get_context_data(*args, **kwargs)
         context['title'] = "Create Diagnostics"
-        try:
-            bp = BusinessPlan.objects.get(user=self.request.user)
-            context['bp'] = bp
-        except Diagnostics.DoesNotExist:
-            context['bp'] = None
-        return context
+        full_context = try_get_context(context, self.request.user)
+        return full_context
 
 # class DiagnosticsUpdateView(LoginRequiredMixin, UpdateView):
 #     template_name = 'forms/diag_update_form.html'

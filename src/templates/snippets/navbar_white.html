@@ -32,7 +32,13 @@
 						<!--<img src="{% static 'logos/logo-white.png' %}" height="30" class="pull-left">-->
 						<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="#">Profile</a></li>
+						<li>
+							{% if profile is not None %}
+								<a href="{{ profile.get_absolute_url }}">Profile</a>
+							{% else %}
+								<a href="/profile/">Profile</a>
+							{% endif %}
+						</li>
 						<li role="separator" class="divider"></li>
 						<li><a href="{% url 'logout' %}">Logout</a></a></li>
 					</ul>
