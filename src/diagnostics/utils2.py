@@ -5,7 +5,8 @@ All the questions for the DiagnosticsQuestionnaire's model's forms
 from django import forms
 from django.db import models
 import pandas as pd
-from django.contrib.staticfiles.templatetags.staticfiles import  static
+from django.contrib.staticfiles.templatetags.staticfiles import static
+import pickle
 
 class Question:
 
@@ -81,57 +82,30 @@ def get_questions_from_db():
         all_questions[area] = questions
     return all_questions
 
-def get_organisation_form_settings():
-    fields = [
-        'org_1',
-        'org_2',
-        'org_3',
-        'org_4',
-        'org_5',
-        'org_6',
-        'org_7',
-        'org_8',
-        'org_9',
-        'org_10',
-        'org_11',
-        'org_12',
-        'org_13',
-        'org_14',
-        'org_15'
-    ]
-    labels = {
-        'org_1': 'Are standard business processes for working created, documented and used by workforce?',
-        'org_2': 'Are targets formally set in the organisation?',
-        'org_3': 'Are the organisation\'s targets linked to aims, vision and mission statement?',
-        'org_4': 'Are the organisation\'s targets SMART (Specific, Measurable, Achievable, Relevant, Timely)?',
-        'org_5': 'Are there systems in place for planning / project management?',
-        'org_6': 'Does a statement of the organisation\'s vision exist?',
-        'org_7': 'How amenable is the organisation to change?',
-        'org_8': 'How much has the company grown in the past 5 years?',
-        'org_9': 'How often are the organisation\'s targets measured / evaluated to assess performance?',
-        'org_10': 'How well is the organisation structure set up to deliver the strategy?',
-        'org_11': 'Mission statement exists?',
-        'org_12': 'What proportion of last year\'s targets did the organisation meet (both financial and otherwise)?',
-        'org_13': 'Which sentence best describes planning within the organisation to meet its set targets / objectives?',
-        'org_14': 'Which sentence best describes the organisation\'s long term aims?',
-        'org_15': 'Which sentence best describes the organisation\'s strategy?'
-    }
-    widgets = {
-        'org_1': forms.RadioSelect(),
-        'org_2': forms.RadioSelect(),
-        'org_3': forms.RadioSelect(),
-        'org_4': forms.RadioSelect(),
-        'org_5': forms.RadioSelect(),
-        'org_6': forms.RadioSelect(),
-        'org_7': forms.RadioSelect(),
-        'org_8': forms.RadioSelect(),
-        'org_9': forms.RadioSelect(),
-        'org_10': forms.RadioSelect(),
-        'org_11': forms.RadioSelect(),
-        'org_12': forms.RadioSelect(),
-        'org_13': forms.RadioSelect(),
-        'org_14': forms.RadioSelect(),
-        'org_15': forms.RadioSelect()
-    }
+def pickle_questions_db():
+    path_to_pickle = static('diagnostics_db/Diagnostics_db.p')
+    questions = get_questions_from_db()
+
+    pickle.dump(questions, open(path_to_pickle, 'wb'))
+
+def unpickle_questions_db():
+    path_to_pickle = static('diagnostics_db/Diagnostics_db.p')
+    questions = pickle.load(open(path_to_pickle, 'rb'))
+
+    return questions
+
+def get_form_settings(questions):
+    fields = []
+    labels = {}
+    widgets = {}
+
+    for key, values in questions.items():
+        for value in values:
+            field_name = value.get_name()
+            field_label = value.get_question()
+            field_widget = forms.RadioSelect()
+            fields.append(field_name)
+            labels[field_name] = field_label
+            widgets[field_name] = field_widget
 
     return fields, labels, widgets
