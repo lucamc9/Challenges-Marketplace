@@ -12,6 +12,11 @@ class DiagnosticsDetailView(DetailView):
     def get_queryset(self):
         return Diagnostics.objects.filter(user=self.request.user)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(DiagnosticsDetailView, self).get_context_data(*args, **kwargs)
+        full_context = try_get_context(context, self.request.user)
+        return full_context
+
 class DiagnosticsCreateView(LoginRequiredMixin, CreateView):
     template_name = 'forms/diag_create_form.html'
     form_class = DiagnosticsForm

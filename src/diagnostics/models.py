@@ -4,6 +4,8 @@ from django.db.models.signals import pre_save, post_save
 from profiles.utils import unique_slug_generator
 from django.core.urlresolvers import reverse
 from .utils import get_organisation_questions
+from .utils2 import unpickle_questions_db, get_question_models, get_questions_from_db
+
 
 
 User = settings.AUTH_USER_MODEL
@@ -13,17 +15,13 @@ class Diagnostics(models.Model):
     slug = models.SlugField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    organisation = models.IntegerField(null=True, blank=True)
+    environmental = models.IntegerField(null=True, blank=True)
     leadership = models.IntegerField(null=True, blank=True)
-    staff = models.IntegerField(null=True, blank=True)
-    hr = models.IntegerField(null=True, blank=True)
-    facilities = models.IntegerField(null=True, blank=True)
     finance = models.IntegerField(null=True, blank=True)
-    manproc = models.IntegerField(null=True, blank=True)
-    marketing = models.IntegerField(null=True, blank=True)
-    environ = models.IntegerField(null=True, blank=True)
-    IT = models.IntegerField(null=True, blank=True)
-    legal = models.IntegerField(null=True, blank=True)
+    operations = models.IntegerField(null=True, blank=True)
+    organisation = models.IntegerField(null=True, blank=True)
+    sales = models.IntegerField(null=True, blank=True)
+    total = models.IntegerField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('diagnostics:detail', kwargs={'slug': self.slug})
@@ -37,61 +35,151 @@ class Diagnostics(models.Model):
     def get_user(self):
         return self.user
 
+    # Organisation
     def get_organisation(self):
         return self.organisation
 
-    def get_leadership(self):
-        return self.leadership
+    def get_organisation_total(self):
+        return 45
 
-    def get_staff(self):
-        return self.hr
+    def get_organisation_percent(self):
+        return self.organisation * 100 / self.get_organisation_total()
 
-    def get_facilities(self):
-        return self.user
+    # Operations
+    def get_operations(self):
+        return self.operations
 
+    def get_operations_total(self):
+        return 56
+
+    def get_operations_percent(self):
+        return self.operations * 100 / self.get_operations_total()
+
+    # Finance
     def get_finance(self):
         return self.finance
 
-    def get_manproc(self):
-        return self.manproc
+    def get_finance_total(self):
+        return 99
 
-    def get_marketing(self):
-        return self.marketing
+    def get_finance_percent(self):
+        return self.finance * 100 / self.get_finance_total()
 
-    def get_environ(self):
-        return self.environ
+    # Sales
+    def get_sales(self):
+        return self.sales
 
-    def get_IT(self):
-        return self.IT
+    def get_sales_total(self):
+        return 47
 
-    def get_legal(self):
-        return self.legal
+    def get_sales_percent(self):
+        return self.sales * 100 / self.get_sales_total()
+
+    # Environmental
+    def get_environmental(self):
+        return self.environmental
+
+    def get_environmental_total(self):
+        return 5
+
+    def get_environmental_percent(self):
+        return self.environmental * 100 / self.get_environmental_total()
+
+    # Leadership
+    def get_leadership(self):
+        return self.leadership
+
+    def get_leadership_total(self):
+        return 22
+
+    def get_leadership_percent(self):
+        return self.leadership * 100 / self.get_leadership_total()
+
+    # Total
+    def get_total(self):
+        return self.total
+
+    def get_real_total(self):
+        return 274
+
+    def get_total_percent(self):
+        return self.total * 100 / self.get_real_total()
 
 class DiagnosticsQuestionnaire(models.Model):
     # Retrieve questions
-    _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15 = get_organisation_questions()
+    questions = unpickle_questions_db()
     # Standard models
     user = models.ForeignKey(User)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    # Organisation questions
-    org_1 = models.IntegerField(choices=_1, default=1)
-    org_2 = models.IntegerField(choices=_2, default=1)
-    org_3 = models.IntegerField(choices=_3, default=1)
-    org_4 = models.IntegerField(choices=_4, default=1)
-    org_5 = models.IntegerField(choices=_5, default=1)
-    org_6 = models.IntegerField(choices=_6, default=1)
-    org_7 = models.IntegerField(choices=_7, default=1)
-    org_8 = models.IntegerField(choices=_8, default=1)
-    org_9 = models.IntegerField(choices=_9, default=1)
-    org_10 = models.IntegerField(choices=_10, default=1)
-    org_11 = models.IntegerField(choices=_11, default=1)
-    org_12 = models.IntegerField(choices=_12, default=1)
-    org_13 = models.IntegerField(choices=_13, default=1)
-    org_14 = models.IntegerField(choices=_14, default=1)
-    org_15 = models.IntegerField(choices=_15, default=1)
-    orgs = [org_1, org_2, org_3, org_4, org_5, org_6, org_7, org_8, org_9, org_10, org_11, org_12, org_13, org_14, org_15]
-    # Leadership questions
+    # Environmental
+    Environmental_0, Environmental_1 = get_question_models(questions, 'Environmental')
+    environmental_list = [Environmental_0, Environmental_1]
+    # Social
+    Social_0, Social_1 = get_question_models(questions, 'Social')
+    social_list = [Social_0, Social_1]
+    # Competition
+    Competition_0, Competition_1, Competition_2 = get_question_models(questions, 'Competition')
+    competition_list = [Competition_0, Competition_1, Competition_2]
+    # Procurement
+    Procurement_0, Procurement_1, Procurement_2, Procurement_3 = get_question_models(questions, 'Procurement')
+    procurement_list = [Procurement_0, Procurement_1, Procurement_2, Procurement_3]
+    # Compliance
+    Compliance_0, Compliance_1, Compliance_2, Compliance_3 = get_question_models(questions, 'Compliance')
+    compliance_list = [Compliance_0, Compliance_1, Compliance_2, Compliance_3]
+    # Legal
+    Legal_0, Legal_1, Legal_2, Legal_3 = get_question_models(questions, 'Legal')
+    compliance_list = [Legal_0, Legal_1, Legal_2, Legal_3]
+    # Facilities
+    Facilities_0, Facilities_1, Facilities_2, Facilities_3, Facilities_4 = get_question_models(questions, 'Facilities')
+    facilities_list = [Facilities_0, Facilities_1, Facilities_2, Facilities_3, Facilities_4]
+    # Processes
+    Processes_0, Processes_1, Processes_2, Processes_3, Processes_4, \
+    Processes_5, Processes_6 = get_question_models(questions, 'Processes')
+    processes_list = [Processes_0, Processes_1, Processes_2, Processes_3, Processes_4, Processes_5, Processes_6]
+    # Governance
+    Governance_0, Governance_1, Governance_2, Governance_3, Governance_4, \
+    Governance_5, Governance_6 = get_question_models(questions, 'Governance')
+    governance_list = [Governance_0, Governance_1, Governance_2,
+                       Governance_3, Governance_4, Governance_5, Governance_6]
+    # IT Technologies
+    ITTechnology_0, ITTechnology_1, ITTechnology_2, ITTechnology_3, \
+    ITTechnology_4, ITTechnology_5, ITTechnology_6, \
+    ITTechnology_7 = get_question_models(questions, 'IT/Technology')
+    technology_list = [ITTechnology_0, ITTechnology_1, ITTechnology_2, ITTechnology_3,
+                       ITTechnology_4, ITTechnology_5, ITTechnology_6, ITTechnology_7]
+    # Marketing
+    Marketing_0, Marketing_1, Marketing_2, Marketing_3, Marketing_4, Marketing_5, \
+    Marketing_6, Marketing_7 = get_question_models(questions, 'Marketing')
+    marketing_list = [Marketing_0, Marketing_1, Marketing_2, Marketing_3,
+                      Marketing_4, Marketing_5, Marketing_6, Marketing_7]
+    # Management
+    Management_0, Management_1, Management_2, Management_3, Management_4, Management_5, \
+    Management_6, Management_7, Management_8, Management_9, Management_10, \
+    Management_11 = get_question_models(questions, 'Management')
+    management_list = [Management_0, Management_1, Management_2, Management_3, Management_4, Management_5,
+                       Management_6, Management_7, Management_8, Management_9, Management_10, Management_11]
+    # Organisation
+    Organisation_0, Organisation_1, Organisation_2, Organisation_3, Organisation_4, \
+    Organisation_5, Organisation_6, Organisation_7, Organisation_8, Organisation_9, \
+    Organisation_10, Organisation_11, Organisation_12, Organisation_13, \
+    Organisation_14 = get_question_models(questions, 'Organisation')
+    organisation_list = [Organisation_0, Organisation_1, Organisation_2, Organisation_3, Organisation_4,
+                         Organisation_5, Organisation_6, Organisation_7, Organisation_8, Organisation_9,
+                         Organisation_10, Organisation_11, Organisation_12, Organisation_13, Organisation_14]
+    # Staff
+    Staff_0, Staff_1, Staff_2, Staff_3, Staff_4, Staff_5, Staff_6, Staff_7, Staff_8, Staff_9, \
+    Staff_10, Staff_11, Staff_12, Staff_13, Staff_14 = get_question_models(questions, 'Staff')
+    staff_list = [Staff_0, Staff_1, Staff_2, Staff_3, Staff_4, Staff_5, Staff_6, Staff_7,
+                  Staff_8, Staff_9, Staff_10, Staff_11, Staff_12, Staff_13, Staff_14]
+    # Finance
+    Finance_0, Finance_1, Finance_2, Finance_3, Finance_4, \
+    Finance_5, Finance_6, Finance_7, Finance_8, Finance_9, \
+    Finance_10, Finance_11, Finance_12, Finance_13, \
+    Finance_14, Finance_15, Finance_16, Finance_17, Finance_18 = get_question_models(questions, 'Finance')
+    finance_list = [Finance_0, Finance_1, Finance_2, Finance_3, Finance_4, Finance_5,
+                    Finance_6, Finance_7, Finance_8, Finance_9, Finance_10, Finance_11,
+                    Finance_12, Finance_13, Finance_14, Finance_15, Finance_16, Finance_17, Finance_18]
 
     class Meta:
         ordering = ['-updated', '-timestamp']
@@ -103,7 +191,43 @@ class DiagnosticsQuestionnaire(models.Model):
         return self.user
 
     def get_organisation(self):
-        return self.orgs
+        return self.organisation_list
+
+    def get_environmental(self):
+        return self.environmental_list
+
+    def get_social(self):
+        return self.social_list
+
+    def get_legal(self):
+        return self.legal_list
+
+    def get_processes(self):
+        return self.processes_list
+
+    def get_finance(self):
+        return self.finance_list
+
+    def get_staff(self):
+        return self.management_list
+
+    def get_marketing(self):
+        return self.marketing_list
+
+    def get_technology(self):
+        return self.technology_list
+
+    def get_facilities(self):
+        return self.facilities_list
+
+    def get_competition(self):
+        return self.competition_list
+
+    def get_procurement(self):
+        return self.procurement_list
+
+    def get_governance(self):
+        return self.governance_list
 
 
 

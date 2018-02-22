@@ -50,7 +50,7 @@ class Question:
         return choices
 
     def get_model(self):
-        return models.IntegerField(choices=self.get_radio_choices, default=1)
+        return models.IntegerField(choices=self.get_radio_choices(), default=1)
 
 def get_questions_from_db():
     '''
@@ -70,7 +70,10 @@ def get_questions_from_db():
         questions = []
         for index, row in area_df.iterrows():
             area = area
-            name = area + "_" + str(idx)
+            if area == 'IT/Technology':
+                name = 'ITTechnology' + "_" + str(idx)
+            else:
+                name = area + "_" + str(idx)
             question = row['Question']
             a_1 = row['Score = 1']
             a_2 = row['Score = 2']
@@ -89,7 +92,8 @@ def pickle_questions_db():
     pickle.dump(questions, open(path_to_pickle, 'wb'))
 
 def unpickle_questions_db():
-    path_to_pickle = static('diagnostics_db/Diagnostics_db.p')
+    path_to_pickle = '/home/lemac/Workspace/ChallenWide/Marketplace/src/static/diagnostics_db/Diagnostics_db.p'
+    # path_to_pickle = static('diagnostics_db/Diagnostics_db.p')
     questions = pickle.load(open(path_to_pickle, 'rb'))
 
     return questions
@@ -109,3 +113,12 @@ def get_form_settings(questions):
             widgets[field_name] = field_widget
 
     return fields, labels, widgets
+
+def get_question_models(questions_dict, sub_area):
+    questions = questions_dict[sub_area]
+    models = (questions[0].get_model(),)
+    for question in questions[1:]:
+        model = question.get_model()
+        models = models + (model,)
+    return models
+
