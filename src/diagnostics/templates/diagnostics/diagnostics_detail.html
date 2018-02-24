@@ -17,6 +17,7 @@
 				<p>Operations</p>
 				<p>Organisation</p>
 				<p>Sales</p>
+				<p>Total</p>
 			</div>
 			<div class="col-xs-10">
 				<div class="progress">
@@ -47,6 +48,11 @@
 				<div class="progress">
 					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ diag.get_sales_percent }}%; background-color: red;">
 						{{ diag.get_sales }}
+					</div>
+				</div>
+				<div class="progress">
+					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ diag.get_total_percent }}%; background-color: red;">
+						{{ diag.get_total }}
 					</div>
 				</div>
 			</div>

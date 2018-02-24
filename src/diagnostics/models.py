@@ -3,9 +3,8 @@ from django.conf import settings
 from django.db.models.signals import pre_save, post_save
 from profiles.utils import unique_slug_generator
 from django.core.urlresolvers import reverse
-from .utils import get_organisation_questions
-from .utils2 import unpickle_questions_db, get_question_models, get_questions_from_db
-
+from .utils import unpickle_questions_db, get_question_models, get_questions_from_db, get_score_from_diagnostics
+from django.utils.text import slugify
 
 
 User = settings.AUTH_USER_MODEL
@@ -40,7 +39,7 @@ class Diagnostics(models.Model):
         return self.organisation
 
     def get_organisation_total(self):
-        return 45
+        return 120
 
     def get_organisation_percent(self):
         return self.organisation * 100 / self.get_organisation_total()
@@ -50,7 +49,7 @@ class Diagnostics(models.Model):
         return self.operations
 
     def get_operations_total(self):
-        return 56
+        return 96
 
     def get_operations_percent(self):
         return self.operations * 100 / self.get_operations_total()
@@ -60,7 +59,7 @@ class Diagnostics(models.Model):
         return self.finance
 
     def get_finance_total(self):
-        return 99
+        return 108
 
     def get_finance_percent(self):
         return self.finance * 100 / self.get_finance_total()
@@ -70,7 +69,7 @@ class Diagnostics(models.Model):
         return self.sales
 
     def get_sales_total(self):
-        return 47
+        return 44
 
     def get_sales_percent(self):
         return self.sales * 100 / self.get_sales_total()
@@ -80,7 +79,7 @@ class Diagnostics(models.Model):
         return self.environmental
 
     def get_environmental_total(self):
-        return 5
+        return 16
 
     def get_environmental_percent(self):
         return self.environmental * 100 / self.get_environmental_total()
@@ -90,7 +89,7 @@ class Diagnostics(models.Model):
         return self.leadership
 
     def get_leadership_total(self):
-        return 22
+        return 76
 
     def get_leadership_percent(self):
         return self.leadership * 100 / self.get_leadership_total()
@@ -100,7 +99,8 @@ class Diagnostics(models.Model):
         return self.total
 
     def get_real_total(self):
-        return 274
+        return self.get_organisation_total() + self.get_environmental_total() + self.get_finance_total() \
+               + self.get_leadership_total() + self.get_operations_total() + self.get_sales_total()
 
     def get_total_percent(self):
         return self.total * 100 / self.get_real_total()
@@ -129,7 +129,7 @@ class DiagnosticsQuestionnaire(models.Model):
     compliance_list = [Compliance_0, Compliance_1, Compliance_2, Compliance_3]
     # Legal
     Legal_0, Legal_1, Legal_2, Legal_3 = get_question_models(questions, 'Legal')
-    compliance_list = [Legal_0, Legal_1, Legal_2, Legal_3]
+    legal_list = [Legal_0, Legal_1, Legal_2, Legal_3]
     # Facilities
     Facilities_0, Facilities_1, Facilities_2, Facilities_3, Facilities_4 = get_question_models(questions, 'Facilities')
     facilities_list = [Facilities_0, Facilities_1, Facilities_2, Facilities_3, Facilities_4]
@@ -193,6 +193,9 @@ class DiagnosticsQuestionnaire(models.Model):
     def get_organisation(self):
         return self.organisation_list
 
+    def get_management(self):
+        return self.management_list
+
     def get_environmental(self):
         return self.environmental_list
 
@@ -209,7 +212,7 @@ class DiagnosticsQuestionnaire(models.Model):
         return self.finance_list
 
     def get_staff(self):
-        return self.management_list
+        return self.staff_list
 
     def get_marketing(self):
         return self.marketing_list
@@ -229,18 +232,36 @@ class DiagnosticsQuestionnaire(models.Model):
     def get_governance(self):
         return self.governance_list
 
+    def get_compliance(self):
+        return self.compliance_list
+
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
-# def pre_save_receiver(sender, instance, *args, **kwargs):
-#     # Function to calculate Diagnostics scores from the questionnaire
-#     diagnostics = Diagnostics()
+def calculate_scores(sender, instance, *args, **kwargs):
+    # Function to calculate Diagnostics scores from the questionnaire
+    user = instance.get_user()
+
+    # Get scores for each section
+    environmental = get_score_from_diagnostics(instance, 'environmental')
+    leadership = get_score_from_diagnostics(instance, 'leadership')
+    finance = get_score_from_diagnostics(instance, 'finance')
+    operations = get_score_from_diagnostics(instance, 'operations')
+    organisation = get_score_from_diagnostics(instance, 'organisation')
+    sales = get_score_from_diagnostics(instance, 'sales')
+    total = environmental + leadership + finance + operations + organisation + sales
+    # Create and save model
+    diagnostics = Diagnostics(user=user, slug=slugify(user.email), environmental=environmental,
+                              leadership=leadership, finance=finance, operations=operations,
+                              organisation=organisation, sales=sales, total=total)
+    diagnostics.save()
+
 
 pre_save.connect(pre_save_receiver, sender=Diagnostics)
-# pre_save.connect(calculate_scores, sender=DiagnosticsQuestionnaire)
+post_save.connect(calculate_scores, sender=DiagnosticsQuestionnaire)
 
 
 
