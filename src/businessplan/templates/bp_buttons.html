@@ -1,5 +1,13 @@
 <div class="nav-buttons" style="margin-top:80px;">
-    <button class="button standard">Data Room</button>
+    {% if room is not None %}
+        <form action="{{ room.get_absolute_url }}">
+            <button class="button standard" type="submit">Data Room</button>
+        </form>
+    {% else %}
+        <form action="/dataroom/">
+            <button class="button standard" type="submit">Data Room</button>
+        </form>
+    {% endif %}
     <button class="button highlighted">Business Plan</button>
     {% if diag is not None %}
         <form action="{{ diag.get_absolute_url }}">

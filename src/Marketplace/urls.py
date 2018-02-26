@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^profile/', include('profiles.urls', namespace='profiles')),
     url(r'^businessplan/', include('businessplan.urls', namespace='businessplan')),
     url(r'^diagnostics/', include('diagnostics.urls', namespace='diagnostics')),
+    url(r'^dataroom/', include('dataroom.urls', namespace='room')),
 ]
 
 if settings.DEBUG:
