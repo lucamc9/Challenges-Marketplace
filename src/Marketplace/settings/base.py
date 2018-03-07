@@ -43,12 +43,7 @@ INSTALLED_APPS = [
     'djmoney',
     'diagnostics',
     'businessplan',
-    'widget_tweaks',
-    'easy_thumbnails',
-    # 'filer',
-    'mptt',
-    'dataroom',
-    'betterforms'
+    'widget_tweaks'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'  # changes the built-in user model to ours
@@ -137,8 +132,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-FILER_CANONICAL_URL = 'dathier/'
-FILER_ENABLE_PERMISSIONS = False
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

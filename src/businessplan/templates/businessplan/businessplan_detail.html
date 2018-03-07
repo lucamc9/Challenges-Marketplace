@@ -11,8 +11,6 @@
 		</div>
 		<div class="col-md-8 col-sm-7">
 			<h1 class="h1 title"> <b>Business Plan</b> <small><a href="{% url 'businessplan:update' slug=object.slug %}">Update</a></small></h1>
-            <p class="question">Plan document</p>
-            <p class="response"><a href="{{ MEDIA_URL }}{{ object.plan.url }}"> {{ object.plan.name }} </a></p>
             <p class="question">Business model</p>
             <p class="response">{{ object.model }}</p>
             <p class="question">Qualifications held</p>
@@ -36,6 +34,10 @@
             <p class="question">Competitive advantage and barriers to entry</p>
             <p class="response">{{ object.advantages }}</p>
 		</div>
+        <!--<div class="col-xs-2">
+            <h1>Business Plan</h1>
+            <a href="/businessplan/download"> {{ object.plan }} </a>
+		</div>-->
 	</div>
 </main>
 {% endblock content %}
