@@ -6,12 +6,14 @@
 {% load static %}
 <main role="main" class="container-fluid">
     <div class="row">
-        <div class="col-xs-2 no-float bar-1">
-            <div class="avatar">
-                <img src="{% static 'logos/logo-white.png' %}" height="80">
+        <div class="col-lg-2 col-sm-4">
+            <div class="col-sm-8 no-float">
+                <div class="avatar">
+                    <img src="{% static 'logos/logo-white.png' %}" height="80">
+                </div>
             </div>
         </div>
-        <div class="col-xs-8 no-float">
+        <div class="col-lg-8 col-sm-6">
             <h1 class="h1 title"> <b>Be Sweet LTD</b> </h1>
             <p>{{ object.get_description }}</p>
 			<div class="row">
@@ -28,8 +30,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-2 no-float bar-2">
-		</div>
+
 	</div>
 </main>
 {% endblock content %}

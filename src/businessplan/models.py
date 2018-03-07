@@ -73,6 +73,9 @@ class BusinessPlan(models.Model):
     def get_financials(self):
         return self.financials
 
+    def get_plan(self):
+        return self.plan
+
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
