@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'djmoney',
     'diagnostics',
     'businessplan',
-    'widget_tweaks'
+    'widget_tweaks',
+    'dataroom'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'  # changes the built-in user model to ours

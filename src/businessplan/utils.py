@@ -21,3 +21,4 @@ def try_get_context(context, request_user):
         context['profile'] = None
 
     return context
+
