@@ -3,7 +3,6 @@ from django.views.generic import DetailView, CreateView, UpdateView, TemplateVie
 from .forms import BusinessPlanForm
 from .models import BusinessPlan
 from .utils import try_get_context
-from diagnostics.models import Diagnostics
 from django.contrib.auth.mixins import LoginRequiredMixin
 import os
 from django.conf import settings

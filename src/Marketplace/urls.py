@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^diagnostics/', include('diagnostics.urls', namespace='diagnostics')),
     url(r'^dataroom/', include('dataroom.urls', namespace='accordion')),
     url(r'^diligenceroom/', include('diligence.urls', namespace='diligence')),
+    url(r'^kpi/', include('kpi.urls', namespace='kpi')),
 ]
 
 if settings.DEBUG:

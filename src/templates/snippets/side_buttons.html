@@ -1,5 +1,7 @@
 <div class="nav-buttons" style="margin-top:80px;">
-    <button class="button standard">KPI</button>
+    <form action="/kpi/">
+        <button class="button standard" type="submit">KPI</button>
+    </form>
     {% if bp is not None %}
         <form action="{{ bp.get_absolute_url }}">
             <button class="button standard" type="submit">Business Plan</button>
