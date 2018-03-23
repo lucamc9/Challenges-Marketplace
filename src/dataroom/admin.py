@@ -1,4 +1,7 @@
 from django.contrib import admin
-from .models import ComplianceModel
+from .models import Accordion, AccordionFileModel
 
-admin.site.register(ComplianceModel)
+admin.site.register(AccordionFileModel)
+admin.site.register(Accordion)
+
+

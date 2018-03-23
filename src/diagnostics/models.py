@@ -3,7 +3,7 @@ from django.conf import settings
 from django.db.models.signals import pre_save, post_save
 from profiles.utils import unique_slug_generator
 from django.core.urlresolvers import reverse
-from .utils import unpickle_questions_db, get_question_models, get_questions_from_db, get_score_from_diagnostics
+from .utils import unpickle_questions_db, get_question_models, get_questions_from_db, get_score_from_diagnostics, Improv
 from django.utils.text import slugify
 
 
@@ -42,7 +42,7 @@ class Diagnostics(models.Model):
         return 120
 
     def get_organisation_percent(self):
-        return self.organisation * 100 / self.get_organisation_total()
+        return int(self.organisation * 100 / self.get_organisation_total())
 
     # Operations
     def get_operations(self):
@@ -52,7 +52,7 @@ class Diagnostics(models.Model):
         return 96
 
     def get_operations_percent(self):
-        return self.operations * 100 / self.get_operations_total()
+        return int(self.operations * 100 / self.get_operations_total())
 
     # Finance
     def get_finance(self):
@@ -62,7 +62,7 @@ class Diagnostics(models.Model):
         return 108
 
     def get_finance_percent(self):
-        return self.finance * 100 / self.get_finance_total()
+        return int(self.finance * 100 / self.get_finance_total())
 
     # Sales
     def get_sales(self):
@@ -72,7 +72,7 @@ class Diagnostics(models.Model):
         return 44
 
     def get_sales_percent(self):
-        return self.sales * 100 / self.get_sales_total()
+        return int(self.sales * 100 / self.get_sales_total())
 
     # Environmental
     def get_environmental(self):
@@ -82,7 +82,7 @@ class Diagnostics(models.Model):
         return 16
 
     def get_environmental_percent(self):
-        return self.environmental * 100 / self.get_environmental_total()
+        return int(self.environmental * 100 / self.get_environmental_total())
 
     # Leadership
     def get_leadership(self):
@@ -92,7 +92,7 @@ class Diagnostics(models.Model):
         return 76
 
     def get_leadership_percent(self):
-        return self.leadership * 100 / self.get_leadership_total()
+        return int(self.leadership * 100 / self.get_leadership_total())
 
     # Total
     def get_total(self):
@@ -103,7 +103,47 @@ class Diagnostics(models.Model):
                + self.get_leadership_total() + self.get_operations_total() + self.get_sales_total()
 
     def get_total_percent(self):
-        return self.total * 100 / self.get_real_total()
+        return int(self.total * 100 / self.get_real_total())
+
+    def get_all_percents(self):
+        return [self.get_environmental_percent(), self.get_finance_percent(), self.get_leadership_percent(),
+                self.get_operations_percent(), self.get_organisation_percent(), self.get_sales_percent(),
+                self.get_total_percent()]
+
+    def there_is_improvement(self):
+        if len(Diagnostics.objects.filter(user=self.user)) > 1:
+            return True
+        else:
+            return False
+
+    def get_improvements_previous(self):
+        previous_diag = Diagnostics.objects.filter(user=self.user)[1]
+        improv_environment = Improv(self.get_environmental_percent(), previous_diag.get_environmental_percent())
+        improv_finance = Improv(self.get_finance_percent(), previous_diag.get_finance_percent())
+        improv_leadership = Improv(self.get_leadership_percent(), previous_diag.get_leadership_percent())
+        improv_operations = Improv(self.get_operations_percent(), previous_diag.get_operations_percent())
+        improv_organisation = Improv(self.get_organisation_percent(), previous_diag.get_organisation_percent())
+        improv_sales = Improv(self.get_sales_percent(), previous_diag.get_sales_percent())
+        improv_total = Improv(self.get_total_percent(), previous_diag.get_total_percent())
+
+        return [improv_environment, improv_finance, improv_leadership,
+                improv_operations, improv_organisation, improv_sales, improv_total]
+
+
+    def get_improvements_first(self):
+        previous_diag = Diagnostics.objects.filter(user=self.user).last()
+
+        improv_environment = Improv(self.get_environmental_percent(), previous_diag.get_environmental_percent())
+        improv_finance = Improv(self.get_finance_percent(), previous_diag.get_finance_percent())
+        improv_leadership = Improv(self.get_leadership_percent(), previous_diag.get_leadership_percent())
+        improv_operations = Improv(self.get_operations_percent(), previous_diag.get_operations_percent())
+        improv_organisation = Improv(self.get_organisation_percent(), previous_diag.get_organisation_percent())
+        improv_sales = Improv(self.get_sales_percent(), previous_diag.get_sales_percent())
+        improv_total = Improv(self.get_total_percent(), previous_diag.get_total_percent())
+
+        return [improv_environment, improv_finance, improv_leadership,
+                improv_operations, improv_organisation, improv_sales, improv_total]
+
 
 class DiagnosticsQuestionnaire(models.Model):
     # Retrieve questions

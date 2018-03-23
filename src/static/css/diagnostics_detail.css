@@ -50,3 +50,7 @@ p {
 .progress {
   margin-bottom: 42px;
 }
+
+.progress-bar {
+    background-image: none;
+}

@@ -1,6 +1,8 @@
 from .models import BusinessPlan
 from diagnostics.models import Diagnostics
 from profiles.models import SMEProfile
+from dataroom.models import Accordion
+from diligence.models import DiligenceRoom
 
 def try_get_context(context, request_user):
     # Get full context
@@ -10,7 +12,7 @@ def try_get_context(context, request_user):
     except BusinessPlan.DoesNotExist:
         context['bp'] = None
     try:
-        diag = Diagnostics.objects.get(user=request_user)
+        diag = Diagnostics.objects.filter(user=request_user)[0]
         context['diag'] = diag
     except Diagnostics.DoesNotExist:
         context['diag'] = None
@@ -19,6 +21,16 @@ def try_get_context(context, request_user):
         context['profile'] = profile
     except SMEProfile.DoesNotExist:
         context['profile'] = None
+    try:
+        accordion = Accordion.objects.get(user=request_user)
+        context['accordion'] = accordion
+    except:
+        context['accordion'] = None
+    try:
+        diligence = DiligenceRoom.objects.get(user=request_user)
+        context['diligence'] = diligence
+    except:
+        context['diligence'] = None
 
     return context
 

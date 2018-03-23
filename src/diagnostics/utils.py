@@ -162,5 +162,21 @@ def get_score_from_diagnostics(diagnostics, area):
 
     return total_score
 
+class Improv:
+
+    def __init__(self, current_percent, previous_percent):
+        self.current_percent = current_percent
+        self.previous_percent = previous_percent
+        self.difference = current_percent - previous_percent
+
+    def get_value(self):
+        return abs(self.difference)
+
+    def is_positive(self):
+        if self.difference < 0:
+            return False
+        else:
+            return True
+
 
 

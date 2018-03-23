@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'diagnostics',
     'businessplan',
     'widget_tweaks',
-    'dataroom'
+    'dataroom',
+    'diligence'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'  # changes the built-in user model to ours

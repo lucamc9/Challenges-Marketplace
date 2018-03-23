@@ -7,30 +7,7 @@
 <main role="main" class="container-fluid">
 	<div class="row">
 		<div class="col-lg-2 col-sm-3">
-			<div class="nav-buttons" style="margin-top:80px;">
-				<button class="button standard">Data Room</button>
-				{% if bp is not None %}
-					<form action="{{ bp.get_absolute_url }}">
-						<button class="button standard" type="submit">Business Plan</button>
-					</form>
-				{% else %}
-					<form action="/businessplan/">
-						<button class="button standard" type="submit">Business Plan</button>
-					</form>
-				{% endif %}
-				{% if diag is not None %}
-					<form action="{{ diag.get_absolute_url }}">
-						<button class="button standard" type="submit">Diagnostics</button>
-					</form>
-				{% else %}
-					<form action="/diagnostics/">
-						<button class="button standard" type="submit">Diagnostics</button>
-					</form>
-				{% endif %}
-				<button class="button standard">KPI</button>
-				<button class="button standard">Due Diligence</button>
-				<button class="button standard">Bespoke Questionnaire</button>
-			</div>
+			{% include 'snippets/side_buttons.html' %}
 		</div>
 		<div class="col-md-8 col-sm-7">
 			<h1 class="h1 title"> <b>My Information</b> </h1>
