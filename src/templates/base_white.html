@@ -6,6 +6,7 @@
     <title>Challenges Marketplace</title>
     {% include 'snippets/css.html' %}
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% block styles %}{% endblock styles %}
 </head>
 <body style="background-color: #F7F7F7">
@@ -14,6 +15,11 @@
 {% block content %}{% endblock content %}
 
 {% include 'snippets/js.html' %}
+<script>
+    $(document).ready(function(){
+        {% block jquery %}{% endblock %}
+    })
+</script>
 </body>
 
 </html>

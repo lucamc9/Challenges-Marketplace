@@ -1,0 +1,234 @@
+{% extends "base_white.html" %}
+
+{% block styles %}<link rel="stylesheet" type="text/css" href="/static/css/businessplan_create.css">{% endblock styles %}
+<script>
+{% block jquery %}
+
+var endpoint = 'api/data';
+var labels = [];
+$.ajax({
+	method: "GET",
+	url: endpoint,
+	success: function(data) {
+        labels = data.labels;
+        grossValues = data.gross_values;
+        netValues = data.net_values;
+        idName1 = 'grossandnet';
+        idName2 = 'improvement';
+        diagLabels = ['leadership', 'management', 'legal'];
+        scores = [12, 20, 50];
+		improvedScores = [20, 80, 90];
+		revenues = [20, 30, 50];
+		expenditures = [-10, -20, -10];
+		cashFlow = [10, 10, 40];
+		idName3 = 'flow';
+		flowLabels = ['July', 'August', 'September'];
+		idName4 = 'sales';
+		sales = [75000, 60000, 100000];
+		salesLabels = ['Deborah', 'Danny', 'Eoghan'];
+		idName5 = 'speedo';
+		barChart(grossValues, netValues, idName1, labels);
+        polarChart(scores, improvedScores, idName2, diagLabels);
+        flowChart(revenues, expenditures, cashFlow, idName3, flowLabels);
+        pieChart(sales, idName4, salesLabels);
+        speedoChart(sales, idName5, salesLabels);
+    },
+	error: function(error_data){
+		console.log("error");
+		console.log(error_data)
+	}
+});
+
+function barChart(gross, net, idName, labels){
+    var ctx = document.getElementById(idName).getContext('2d');
+	var grossandnet = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'Gross profit margin',
+				data: gross,
+				backgroundColor: 'rgba(54, 162, 235, 0.5)',
+				borderColor: 'rgba(54, 162, 235, 1)',
+				borderWidth: 1
+			},
+			{
+                label: 'Net profit margin',
+                data: net,
+				backgroundColor: 'rgba(255, 159, 64, 0.5)',
+				borderColor: 'rgba(255, 159, 64, 0.5)',
+				borderWidth: 1
+			}]
+		},
+		options: {
+		    scales: {
+		        yAxes: [{
+		            ticks: {
+		                beginAtZero:true
+		            },
+					gridLines: {
+		                display: false
+					}
+		        }],
+				xAxes: [{
+					gridLines: {
+		                display: false
+					}
+		        }]
+		    }
+		}
+	});
+}
+function polarChart(scores, improvedScores, idName, labels){
+    var ctx = document.getElementById(idName).getContext('2d');
+	var polar = new Chart(ctx, {
+		type: 'polarArea',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'First Scores',
+				data: scores,
+				backgroundColor: 'rgba(54, 162, 235, 0.2)',
+				borderColor: 'rgba(54, 162, 235, 1)',
+				borderWidth: 1
+			},
+			{
+                label: 'Current Scores',
+                data: improvedScores,
+				backgroundColor: 'rgba(255, 159, 64, 0.2)',
+				borderColor: 'rgba(255, 159, 64, 1)',
+				borderWidth: 1
+			}]
+		}
+	});
+}
+function flowChart(revenues, expenditures, cashFlow, idName, labels){
+    var ctx = document.getElementById(idName).getContext('2d');
+	var flow = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: labels,
+			datasets: [{
+                label: 'Expenditures',
+                data: expenditures,
+				stack:0,
+				backgroundColor: 'rgba(255, 159, 64, 0.5)',
+				borderColor: 'rgba(255, 159, 64, 0.5)',
+				borderWidth: 1
+			},
+			{
+				label: 'Revenues',
+				data: revenues,
+				stack:0,
+				backgroundColor: 'rgba(54, 162, 235, 0.5)',
+				borderColor: 'rgba(54, 162, 235, 0.5)',
+				borderWidth: 1
+			},
+			{
+				label: 'Cash Flow',
+				data: cashFlow,
+				stack:1,
+				backgroundColor: 'rgba(54, 166, 35, 0.5)',
+				borderColor: 'rgba(54, 166, 35, 0.5)',
+				borderWidth: 1
+			}]
+		},
+		options: {
+		    scales: {
+		        yAxes: [{
+		            ticks: {
+		                beginAtZero:true
+		            },
+					gridLines: {
+		                display: false
+					},
+					stacked:true
+		        }],
+				xAxes: [{
+					gridLines: {
+		                display: false
+					},
+					stacked:true
+		        }]
+		    }
+		}
+	});
+}
+function pieChart(scores, idName, labels){
+    var ctx = document.getElementById(idName).getContext('2d');
+	var pie = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'First Scores',
+				data: scores,
+				backgroundColor: [
+				    'rgba(54, 162, 235, 0.5)',
+					'rgba(54, 166, 35, 0.5)',
+					'rgba(255, 159, 64, 0.5)'
+					],
+				borderColor: 'rgba(247, 247, 247, 1)',
+				borderWidth: 8
+			}]
+		}
+	});
+}
+function speedoChart(scores, idName, labels){
+    var ctx = document.getElementById(idName).getContext('2d');
+	var speedo = new Chart(ctx, {
+		type: 'doughnut',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'Scores',
+				data: scores,
+				backgroundColor: [
+				    'rgba(54, 162, 235, 0.5)',
+					'rgba(54, 166, 35, 0.5)',
+					'rgba(255, 159, 64, 0.5)'
+					],
+				borderColor: 'rgba(247, 247, 247, 1)',
+				borderWidth: 8
+			}]
+		},
+		options: {
+		    rotation: -Math.PI,
+		    circumference: Math.PI
+		}
+	});
+}
+{% endblock %}
+</script>
+{% block content %}
+{% load static %}
+<main role="main" class="container-fluid">
+	<div class="row">
+		<div class="col-lg-2 col-sm-3">
+			{% include 'snippets/side_buttons.html' %}
+		</div>
+		<div class="col-md-8 col-sm-7">
+			<h1 class="h1 title"> <b>KPI - Chart.js demo</b> </h1>
+			<div class="col-xs-6">
+				<canvas id="grossandnet" width="100" height="100"></canvas>
+				<canvas id="improvement" width="100" height="100"></canvas>
+				<canvas id="flow" width="100" height="100"></canvas>
+				<canvas id="sales" width="100" height="100"></canvas>
+				<canvas id="speedo" width="100" height="100"></canvas>
+				<div class="container">
+					<h2>Employees:</h2>
+					<i class="fa fa-female" style="font-size:40px;"></i>
+					<i class="fa fa-female" style="font-size:40px;"></i>
+					<i class="fa fa-female" style="font-size:40px;"></i>
+					<i class="fa fa-female" style="font-size:40px;"></i>
+					<i class="fa fa-female" style="font-size:40px;"></i>
+					<i class="fa fa-female" style="font-size:40px;"></i>
+					<i class="fa fa-male" style="font-size:40px;"></i>
+					<i class="fa fa-male" style="font-size:40px;"></i>
+					<i class="fa fa-male" style="font-size:40px;"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock content %}

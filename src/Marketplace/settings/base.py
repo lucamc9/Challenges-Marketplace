@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'dataroom',
     'diligence',
-    'kpi'
+    'kpi',
+    'rest_framework'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'  # changes the built-in user model to ours
@@ -139,4 +140,10 @@ MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'Marketplace.authentication.ApiAuthentication',
+    )
+}
 
