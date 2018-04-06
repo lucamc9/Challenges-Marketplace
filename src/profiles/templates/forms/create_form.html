@@ -39,11 +39,6 @@
                     {% else %}
                       {% render_field field class="form-control is-valid" %}
                     {% endif %}
-                  {% elif "Upload your business plan" in field.label_tag or "Financials" in field.label_tag %}
-                    <!--<div>
-                        <input id="image" type="image" src="{% static 'icons/document-upload.png' %}" height="30">
-                    </div>-->
-                    {% render_field field class="form-control-file" %}
                   {% else %}
                     {% render_field field class="form-control" %}
                   {% endif %}

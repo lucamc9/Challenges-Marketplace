@@ -4,11 +4,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import GrossAndNet
+from .models import GraphData, ExcelTemplate
 from accounts.models import User # temporary solution
+from .utils import get_graph_elements_flow, get_graph_elements_gn
+from .forms import ExcelTemplateForm
 
-class KPIHomeView(LoginRequiredMixin, TemplateView):
+class KPIHomeView(LoginRequiredMixin, CreateView):
     template_name = 'home_view.html'
+    form_class = ExcelTemplateForm
+
+    def get_queryset(self):
+        return ExcelTemplate.objects.filter(user=self.request.user)
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.user = self.request.user
+        return super(KPIHomeView, self).form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
         context = super(KPIHomeView, self).get_context_data(*args, **kwargs)
@@ -31,41 +42,40 @@ class KPIDemoView(LoginRequiredMixin, TemplateView):
 
 
 def get_data(request, *args, **kwargs):
-    gross_and_nets = GrossAndNet.objects.filter(user=request.user)
-    years = []
-    gross_values = []
-    net_values = []
-    for gn in gross_and_nets:
-        years.append(gn.get_year())
-        gross_values.append(gn.get_gross())
-        net_values.append(gn.get_net())
+    kpis = GraphData.objects.filter(user=request.user)
+    years, gross_values, net_values = get_graph_elements_gn(kpis)
+    revenues, expenditures, cash_flow, flow_labels = get_graph_elements_flow(kpis)
     data = {
         "labels": years,
         "gross_values": gross_values,
         "net_values": net_values,
+        "revenues": revenues,
+        "expenditures": expenditures,
+        "cash_flow": cash_flow,
+        "flow_labels": flow_labels
     }
     return JsonResponse(data)
 
 # Not using REST for now: this project has custom user and can't get the email from headers
-class ChartData(APIView):
-    authentication_classes = []
-    permission_classes = []
-
-    def get(self, request, format=None):
-        temporary_user = User.objects.get(email='lemac_cw@lemac.com') # temporary solution
-        print(request.META.get('HTTP_X_EMAIL'))
-        gross_and_nets = GrossAndNet.objects.filter(user=temporary_user)
-        years = []
-        gross_values = []
-        net_values = []
-        for gn in gross_and_nets:
-            years.append(gn.get_year())
-            gross_values.append(gn.get_gross())
-            net_values.append(gn.get_net())
-        data = {
-            "labels": years,
-            "gross_values": gross_values,
-            "net_values": net_values,
-        }
-        return Response(data)
+# class ChartData(APIView):
+#     authentication_classes = []
+#     permission_classes = []
+#
+#     def get(self, request, format=None):
+#         temporary_user = User.objects.get(email='lemac_cw@lemac.com') # temporary solution
+#         print(request.META.get('HTTP_X_EMAIL'))
+#         gross_and_nets = GrossAndNet.objects.filter(user=temporary_user)
+#         years = []
+#         gross_values = []
+#         net_values = []
+#         for gn in gross_and_nets:
+#             years.append(gn.get_year())
+#             gross_values.append(gn.get_gross())
+#             net_values.append(gn.get_net())
+#         data = {
+#             "labels": years,
+#             "gross_values": gross_values,
+#             "net_values": net_values,
+#         }
+#         return Response(data)
 

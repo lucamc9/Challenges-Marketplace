@@ -14,6 +14,7 @@ class SMEProfile(models.Model):
     LEGAL_STRUCT, OWNERSHIP, YEAR_CHOICES, CURRENCIES, SECTOR = sme_choices()
     # Assign model fields
     user = models.ForeignKey(User)
+    company_name = models.CharField(max_length=50, blank=True, null=True)
     description = models.CharField(max_length=1500, blank=True, null=True)
     legal_struct = models.CharField(max_length=2, choices=LEGAL_STRUCT)
     ownership = models.CharField(max_length=2, choices=OWNERSHIP)
@@ -28,7 +29,7 @@ class SMEProfile(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def get_absolute_url(self):
-        return reverse('profiles:detail', kwargs={'slug': self.slug})
+        return reverse('profiles:detail-sme', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['-updated', '-timestamp']
@@ -107,12 +108,44 @@ class InvestorProfile(models.Model):
     def get_avatar(self):
         return self.avatar
 
+class StaffProfile(models.Model):
+    user = models.ForeignKey(User)
+    full_name = models.CharField(max_length=50, blank=True, null=True)
+    role = models.CharField(max_length=50, blank=True, null=True)
+    avatar = models.ImageField(default="static/logos/logo-white.png")
+    slug = models.SlugField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('profiles:detail-staff', kwargs={'slug': self.slug})
+
+    class Meta:
+        ordering = ['-updated', '-timestamp']
+
+    def __str__(self):
+        return self.user.__str__()
+
+    def get_user(self):
+        return self.user
+
+    def get_full_name(self):
+        return self.full_name
+
+    def get_role(self):
+        return self.role
+
+    def get_avatar(self):
+        return self.avatar
+
+
 def pre_save_receiver(sender, instance, *args, **kwargs):
     # Make a slug out of the user's email for the specific profile
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
 pre_save.connect(pre_save_receiver, sender=SMEProfile)
+pre_save.connect(pre_save_receiver, sender=StaffProfile)
 pre_save.connect(pre_save_receiver, sender=InvestorProfile)
 
 

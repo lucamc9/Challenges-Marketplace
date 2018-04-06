@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import SMEProfile
+from .models import SMEProfile, StaffProfile
 
 User = get_user_model()
 
@@ -16,4 +16,12 @@ class SMEForm(forms.ModelForm):
             'currency',
             'lkin_urls',
             'sector'
+        ]
+
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = StaffProfile
+        fields = [
+            'full_name',
+            'role'
         ]
