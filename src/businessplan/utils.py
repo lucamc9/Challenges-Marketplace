@@ -1,6 +1,6 @@
 from .models import BusinessPlan
 from diagnostics.models import Diagnostics
-from profiles.models import SMEProfile
+from profiles.models import SMEProfile, StaffProfile
 from dataroom.models import Accordion
 from diligence.models import DiligenceRoom
 from kpi.models import GraphData
@@ -19,9 +19,14 @@ def try_get_context(context, request_user):
         context['diag'] = None
     try:
         profile = SMEProfile.objects.get(user=request_user)
-        context['profile'] = profile
+        context['smeprofile'] = profile
     except SMEProfile.DoesNotExist:
-        context['profile'] = None
+        context['smeprofile'] = None
+    try:
+        profile = StaffProfile.objects.get(user=request_user)
+        context['staffprofile'] = profile
+    except StaffProfile.DoesNotExist:
+        context['staffprofile'] = None
     try:
         accordion = Accordion.objects.get(user=request_user)
         context['accordion'] = accordion

@@ -6,8 +6,26 @@ from .utils import sme_choices
 import datetime
 from django.core.urlresolvers import reverse
 from .utils import unique_slug_generator
+from django.db.models import Q
 
 User = settings.AUTH_USER_MODEL
+
+class SMEProfileQuerySet(models.query.QuerySet):
+    def search(self, query):
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(company_name__icontains=query)|
+                Q(country__icontains=query)
+                ).distinct()
+        return self
+
+class SMEProfileManager(models.Manager):
+    def get_queryset(self):
+        return SMEProfileQuerySet(self.model, using=self._db)
+
+    def search(self, query):
+        return self.get_queryset().search(query)
 
 class SMEProfile(models.Model):
     # Retrieve all choices
@@ -27,6 +45,8 @@ class SMEProfile(models.Model):
     slug = models.SlugField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    objects = SMEProfileManager()
 
     def get_absolute_url(self):
         return reverse('profiles:detail-sme', kwargs={'slug': self.slug})

@@ -1,8 +1,11 @@
 from django.contrib.auth import get_user_model
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 from .forms import SMEForm, StaffForm
 from .models import SMEProfile, StaffProfile
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
+from django.http import Http404
+from businessplan.utils import try_get_context
 
 User = get_user_model()
 
@@ -11,8 +14,12 @@ class ProfileListView(ListView):
         return SMEProfile.objects.filter(user=self.request.user)
 
 class SMEProfileDetailView(DetailView):
-    def get_queryset(self):
-        return SMEProfile.objects.filter(user=self.request.user)
+
+    def get_object(self):
+        slug = self.kwargs.get("slug")
+        if slug is None:
+            raise Http404
+        return get_object_or_404(SMEProfile, slug__iexact=slug)
 
 
 class StaffProfileDetailView(DetailView):
@@ -76,3 +83,15 @@ class StaffProfileUpdateView(LoginRequiredMixin, UpdateView):
         context = super(StaffProfileUpdateView, self).get_context_data(*args, **kwargs)
         context['title'] = "Update Profile"
         return context
+
+class SearchSMEView(LoginRequiredMixin, TemplateView):
+    template_name = 'profiles/base_search.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SearchSMEView, self).get_context_data(*args, **kwargs)
+        query = self.request.GET.get('query')
+        qs = SMEProfile.objects.search(query)
+        if qs.exists():
+            context['smes'] = qs
+        full_context = try_get_context(context, self.request.user)
+        return full_context
