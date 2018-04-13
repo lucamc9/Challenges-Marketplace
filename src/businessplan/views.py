@@ -1,22 +1,29 @@
-from django.contrib.auth import get_user_model
 from django.views.generic import DetailView, CreateView, UpdateView, TemplateView
 from .forms import BusinessPlanForm
 from .models import BusinessPlan
 from .utils import try_get_context
 from django.contrib.auth.mixins import LoginRequiredMixin
 import os
+from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.http import HttpResponse, Http404
 
-User = get_user_model()
-
 class BusinessPlanDetailView(DetailView):
-    def get_queryset(self):
-        return BusinessPlan.objects.filter(user=self.request.user)
+
+    def get_object(self):
+        slug = self.kwargs.get("slug")
+        if slug is None:
+            raise Http404
+        return get_object_or_404(BusinessPlan, slug__iexact=slug)
 
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanDetailView, self).get_context_data(*args, **kwargs)
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = BusinessPlan.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
 class BusinessPlanCreateView(LoginRequiredMixin, CreateView):
@@ -33,8 +40,12 @@ class BusinessPlanCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanCreateView, self).get_context_data(*args, **kwargs)
-        context['title'] = "Create a business plan"
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = BusinessPlan.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
 class BusinessPlanUpdateView(LoginRequiredMixin, UpdateView):
@@ -46,8 +57,12 @@ class BusinessPlanUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BusinessPlanUpdateView, self).get_context_data(*args, **kwargs)
-        context['title'] = "Update Business Plan"
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = BusinessPlan.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
 class InfoView(LoginRequiredMixin, TemplateView):
@@ -58,7 +73,12 @@ class InfoView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(InfoView, self).get_context_data(*args, **kwargs)
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = BusinessPlan.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
 def download(request, path):

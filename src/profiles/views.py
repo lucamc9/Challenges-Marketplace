@@ -93,5 +93,10 @@ class SearchSMEView(LoginRequiredMixin, TemplateView):
         qs = SMEProfile.objects.search(query)
         if qs.exists():
             context['smes'] = qs
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = SMEProfile.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context

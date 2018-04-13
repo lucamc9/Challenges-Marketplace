@@ -3,8 +3,10 @@ from django.views.generic import DetailView, CreateView, UpdateView, TemplateVie
 from django.contrib.auth.mixins import LoginRequiredMixin
 from businessplan.utils import try_get_context
 from .forms import DataRoomForm
-from .utils import add_accordion_context
 from .models import Accordion, AccordionFileModel
+from django.shortcuts import get_object_or_404
+from django.http import Http404
+
 
 User = get_user_model()
 
@@ -13,7 +15,12 @@ class RedirectView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(RedirectView, self).get_context_data(*args, **kwargs)
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = Accordion.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
 class DataRoomFormView(FormView):
@@ -24,7 +31,12 @@ class DataRoomFormView(FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(DataRoomFormView, self).get_context_data(*args, **kwargs)
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = Accordion.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
     def post(self, request, *args, **kwargs):
@@ -53,11 +65,18 @@ class DataRoomFormView(FormView):
 
 class DataRoomDetailView(DetailView):
 
-    def get_queryset(self):
-        return Accordion.objects.filter(user=self.request.user)
+    def get_object(self):
+        slug = self.kwargs.get("slug")
+        if slug is None:
+            raise Http404
+        return get_object_or_404(Accordion, slug__iexact=slug)
 
     def get_context_data(self, *args, **kwargs):
         context = super(DataRoomDetailView, self).get_context_data(*args, **kwargs)
-        full_context = try_get_context(context, self.request.user)
-        full_context = add_accordion_context(full_context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = Accordion.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context

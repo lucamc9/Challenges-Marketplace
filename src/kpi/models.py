@@ -4,6 +4,8 @@ from profiles.utils import sme_choices
 import datetime
 from .utils import get_month_choices
 from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_save, post_save
+from profiles.utils import unique_slug_generator
 
 User = settings.AUTH_USER_MODEL
 
@@ -11,6 +13,7 @@ class GraphData(models.Model):
     _, _, YEAR_CHOICES, _, _ = sme_choices()
     MONTHS = get_month_choices()
     user = models.ForeignKey(User)
+    slug = models.SlugField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     gross = models.IntegerField(null=True, blank=True)
@@ -22,7 +25,7 @@ class GraphData(models.Model):
     flow_month = models.CharField(max_length=50, choices=MONTHS)
 
     def get_absolute_url(self):
-        return reverse('kpi:demo')
+        return reverse('kpi:detail', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['-updated', '-timestamp']
@@ -68,3 +71,9 @@ class ExcelTemplate(models.Model):
 
     def get_template(self):
         return self.template
+
+def pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(pre_save_receiver, sender=GraphData)

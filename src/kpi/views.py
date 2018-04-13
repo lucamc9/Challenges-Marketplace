@@ -23,7 +23,12 @@ class KPIHomeView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(KPIHomeView, self).get_context_data(*args, **kwargs)
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = GraphData.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
 class KPIDemoView(LoginRequiredMixin, TemplateView):
@@ -31,14 +36,19 @@ class KPIDemoView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(KPIDemoView, self).get_context_data(*args, **kwargs)
-        full_context = try_get_context(context, self.request.user)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = GraphData.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
         return full_context
 
-    def get(self, request, *args, **kwargs):
-        response = super(KPIDemoView, self).get(request, *args, **kwargs)
-        response['X_EMAIL'] = request.user.email
-        print(response['X_EMAIL'])
-        return response
+    # def get(self, request, *args, **kwargs):
+    #     response = super(KPIDemoView, self).get(request, *args, **kwargs)
+    #     response['X_EMAIL'] = request.user.email
+    #     print(response['X_EMAIL'])
+    #     return response
 
 
 def get_data(request, *args, **kwargs):

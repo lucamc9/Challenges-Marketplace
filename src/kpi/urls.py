@@ -7,6 +7,6 @@ from .views import (
 
 urlpatterns = [
     url(r'^$', KPIHomeView.as_view(), name='home'),
-    url(r'^chart-demo/$', KPIDemoView.as_view(), name='demo'),
-    url(r'^chart-demo/api/data/$', get_data, name='api-data'),
+    url(r'^(?P<slug>[\w-]+)/$', KPIDemoView.as_view(), name='detail'),
+    url(r'^(?P<slug>[\w-]+)/api/data/$', get_data, name='api-data'),
 ]
