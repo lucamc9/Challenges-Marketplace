@@ -6,6 +6,7 @@ from .forms import DataRoomForm
 from .models import Accordion, AccordionFileModel
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from .utils import add_accordion_context
 
 
 User = get_user_model()
@@ -79,4 +80,5 @@ class DataRoomDetailView(DetailView):
         else:
             user = self.request.user
         full_context = try_get_context(context, user)
+        full_context = add_accordion_context(full_context, user)
         return full_context

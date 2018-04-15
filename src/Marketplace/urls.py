@@ -3,14 +3,14 @@ from django.contrib import admin
 from django.contrib.auth.views import logout
 from django.views.generic import TemplateView
 from accounts.views import RegisterView, LoginView
-from profiles.views import SearchSMEView
+from profiles.views import SearchSMEView, HomePageView
 from businessplan.views import InfoView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='base_home.html'), name='base_home'),
+    url(r'^$', HomePageView.as_view(), name='base_home'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', logout, {'next_page': '/login/'}, name='logout'),
     url(r'^register/$', RegisterView.as_view(), name='register'),

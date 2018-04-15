@@ -9,10 +9,6 @@ from businessplan.utils import try_get_context
 
 User = get_user_model()
 
-class ProfileListView(ListView):
-    def get_queryset(self):
-        return SMEProfile.objects.filter(user=self.request.user)
-
 class SMEProfileDetailView(DetailView):
 
     def get_object(self):
@@ -20,6 +16,20 @@ class SMEProfileDetailView(DetailView):
         if slug is None:
             raise Http404
         return get_object_or_404(SMEProfile, slug__iexact=slug)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SMEProfileDetailView, self).get_context_data(*args, **kwargs)
+        query = self.request.GET.get('query')
+        qs = SMEProfile.objects.search(query)
+        if qs.exists():
+            context['smes'] = qs
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = SMEProfile.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
+        return full_context
 
 
 class StaffProfileDetailView(DetailView):
@@ -99,4 +109,12 @@ class SearchSMEView(LoginRequiredMixin, TemplateView):
         else:
             user = self.request.user
         full_context = try_get_context(context, user)
+        return full_context
+
+class HomePageView(TemplateView):
+    template_name = 'base_home.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(HomePageView, self).get_context_data(*args, **kwargs)
+        full_context = try_get_context(context, self.request.user)
         return full_context

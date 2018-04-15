@@ -12,7 +12,13 @@
 
 {% block content %}
 <div class="col-xs-offset-4 col-xs-4">
-    <h1>Back at it!</h1>
+    {% if smeprofile is not None %}
+        <h1>Back at it! Go to your <a href="{{ smeprofile.get_absolute_url }}">profile</a>.</h1>
+    {% elif staffprofile is not None %}
+        <h1>Back at it! Go to your <a href="{{ staffprofile.get_absolute_url }}">profile</a>.</h1>
+    {% else %}
+        <h1>Back at it! Go to your <a href="/profile/">profile</a>.</h1>
+    {% endif %}
 </div>
 {% endblock content %}
 

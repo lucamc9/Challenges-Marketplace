@@ -27,11 +27,13 @@
                     <p><b>Ownership:</b> {{ object.get_ownership_display }}</p>
                 </div>
             </div>
+            {% if object.user != request.user %}
             <div class="row">
                 <div class="col-xs-6 no-float">
                     <p>Have a look at my <a href="{% url 'businessplan:detail' slug=object.slug %}">information</a></p>
                 </div>
             </div>
+            {% endif %}
 		</div>
 		<div class="col-xs-2 no-float bar-2">
 		</div>

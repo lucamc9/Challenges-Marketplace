@@ -20,13 +20,11 @@
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="Search..." name="query" value="{{ request.GET.query }}">
 				</div>
-				<!--<button type="submit" class="btn btn-default">Submit</button>-->
 			</form>
 			<ul class="nav navbar-nav">
 				{% if user.is_staff %}
 					<li><a href="/search-companies/" id="nav-names">SMEs</a></li>
 				{% endif %}
-				<li><a href="{% url 'profiles:list' %}" id="nav-names">Dashboard</a></li>
 				<li><a href="/info/" id="nav-names">My Info</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
