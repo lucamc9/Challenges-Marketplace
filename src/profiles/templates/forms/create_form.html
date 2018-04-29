@@ -10,7 +10,7 @@
 <main role="main" class="container-fluid">
 	<div class="row">
 		<div class="col-xs-offset-2 col-xs-8">
-			<h1 class="h1 title"> <b>Create a profile</b> </h1>
+			<h1 class="h1 title"> <b>Create a company profile</b> </h1>
             {% load widget_tweaks %}
 
             <form method="post" enctype='multipart/form-data' novalidate>
@@ -25,28 +25,58 @@
               {% endif %}
 
               {% for field in form.visible_fields %}
-                <div class="form-group">
-                  {{ field.label_tag }}
+                {% if request.user.is_sme %}
+                  {% if field.label != "User" %}
+                  <div class="form-group">
+                    {{ field.label_tag }}
 
-                  {% if form.is_bound %}
-                    {% if field.errors %}
-                      {% render_field field class="form-control is-invalid" %}
-                      {% for error in field.errors %}
-                        <div class="invalid-feedback">
-                          {{ error }}
-                        </div>
-                      {% endfor %}
+                    {% if form.is_bound %}
+                      {% if field.errors %}
+                        {% render_field field class="form-control is-invalid" %}
+                        {% for error in field.errors %}
+                          <div class="invalid-feedback">
+                            {{ error }}
+                          </div>
+                        {% endfor %}
+                      {% else %}
+                        {% render_field field class="form-control is-valid" %}
+                      {% endif %}
                     {% else %}
-                      {% render_field field class="form-control is-valid" %}
+                      {% render_field field class="form-control" %}
                     {% endif %}
-                  {% else %}
-                    {% render_field field class="form-control" %}
-                  {% endif %}
 
-                  {% if field.help_text %}
-                    <small class="form-text text-muted">{{ field.help_text }}</small>
-                  {% endif %}
-                </div>
+                    {% if field.help_text %}
+                      <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% else %}
+                  <div class="form-group">
+                    {{ field.label_tag }}
+
+                    {% if form.is_bound %}
+                      {% if field.errors %}
+                        {% render_field field class="form-control is-invalid" %}
+                        {% for error in field.errors %}
+                          <div class="invalid-feedback">
+                            {{ error }}
+                          </div>
+                        {% endfor %}
+                      {% else %}
+                        {% render_field field class="form-control is-valid" %}
+                      {% endif %}
+                    {% else %}
+                      {% render_field field class="form-control" %}
+                    {% endif %}
+
+                    {% if field.help_text %}
+                      <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                  </div>
+              {% if field.label == "User" %}
+              <p>New user? Create <a href="{% url 'register' %}">one</a>.</p>
+              {% endif %}
+                {% endif %}
               {% endfor %}
 
               <button type="submit" class="btn btn-primary">Submit</button>

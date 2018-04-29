@@ -4,6 +4,7 @@ import random
 import string
 from django.utils.text import slugify
 
+
 def sme_choices():
     """
         Helper function to retrieve all listed choices for the SME model
@@ -139,3 +140,35 @@ def unique_slug_generator(instance, new_slug=None):
                 )
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug
+
+def add_filter_choices(context, user):
+    LEGAL_STRUCT, OWNERSHIP, YEAR_CHOICES, CURRENCIES, SECTOR = sme_choices()
+    context['legal_choices'] = LEGAL_STRUCT
+    context['ownership'] = OWNERSHIP
+    context['currencies'] = CURRENCIES
+    context['sectors'] = SECTOR
+    context['years'] = YEAR_CHOICES
+    return context
+
+def filter_search(self, qs):
+    legal = self.request.GET.get('legal')
+    owner = self.request.GET.get('owner')
+    currency = self.request.GET.get('currency')
+    sector = self.request.GET.get('sector')
+    year = self.request.GET.get('year')
+    country = self.request.GET.get('country')
+    if legal:
+        qs = qs.filter(legal_struct__iexact=legal)
+    if owner:
+        qs = qs.filter(ownership__iexact=owner)
+    if currency:
+        qs = qs.filter(currency__iexact=currency)
+    if sector:
+        qs = qs.filter(sector__iexact=sector)
+    if year:
+        qs = qs.filter(year__iexact=year)
+    if country:
+        for q in qs:
+            if q.get_country().name != country:
+                qs = qs.exclude(user=q.get_user())
+    return qs

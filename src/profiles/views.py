@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from businessplan.utils import try_get_context
+from .utils import add_filter_choices, filter_search
 
 User = get_user_model()
 
@@ -40,12 +41,10 @@ class SMEProfileCreateView(LoginRequiredMixin, CreateView):
     template_name = 'forms/create_form.html'
     form_class = SMEForm
 
-    def get_queryset(self):
-        return SMEProfile.objects.filter(user=self.request.user)
-
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.user = self.request.user
+        if not self.request.user.is_staff:
+            obj.user = self.request.user
         return super(SMEProfileCreateView, self).form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
@@ -101,6 +100,7 @@ class SearchSMEView(LoginRequiredMixin, TemplateView):
         context = super(SearchSMEView, self).get_context_data(*args, **kwargs)
         query = self.request.GET.get('query')
         qs = SMEProfile.objects.search(query)
+        qs = filter_search(self, qs)
         if qs.exists():
             context['smes'] = qs
         slug = self.kwargs.get("slug")
@@ -109,6 +109,7 @@ class SearchSMEView(LoginRequiredMixin, TemplateView):
         else:
             user = self.request.user
         full_context = try_get_context(context, user)
+        full_context = add_filter_choices(context, user)
         return full_context
 
 class HomePageView(TemplateView):

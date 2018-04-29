@@ -87,6 +87,9 @@ class SMEProfile(models.Model):
     def get_avatar(self):
         return self.avatar
 
+    def get_company_name(self):
+        return self.company_name
+
 class InvestorProfile(models.Model):
     LEGAL_STRUCT, OWNERSHIP, YEAR_CHOICES, CURRENCIES, SECTOR = sme_choices()
     DEAL_TYPE = (
@@ -109,6 +112,9 @@ class InvestorProfile(models.Model):
 
     def __str__(self):
         return self.user.__str__()
+
+    def get_slug(self):
+        return self.slug
 
     def get_user(self):
         return self.user
@@ -145,6 +151,9 @@ class StaffProfile(models.Model):
 
     def __str__(self):
         return self.user.__str__()
+
+    def get_slug(self):
+        return self.slug
 
     def get_user(self):
         return self.user

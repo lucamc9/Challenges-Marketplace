@@ -17,13 +17,13 @@ html,body,.container-fluid {
 }
 
 .name {
-  font-size: 12px;
+  font-size: 11px;
   color: white;
   padding-top: 18px;
 }
 
 .nav-fluid {
-    padding: 5px 0 5px 15px;
+    padding-left: 15px;
 }
 
 #nav-names {

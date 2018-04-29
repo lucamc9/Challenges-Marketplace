@@ -25,7 +25,11 @@
 				{% if user.is_staff %}
 					<li><a href="/search-companies/" id="nav-names">SMEs</a></li>
 				{% endif %}
-				<li><a href="/info/" id="nav-names">My Info</a></li>
+				{% if smeprofile is not None %}
+					<li><a href="{% url 'info' slug=smeprofile.slug %}" id="nav-names">My Info</a></li>
+				{% elif staffprofile is not None %}
+					<li><a href="{% url 'info' slug=staffprofile.slug %}" id="nav-names">My Info</a></li>
+				{% endif %}
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

@@ -8,6 +8,8 @@ class SMEForm(forms.ModelForm):
     class Meta:
         model = SMEProfile
         fields = [
+            'user',
+            'company_name',
             'description',
             'legal_struct',
             'ownership',

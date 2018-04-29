@@ -15,9 +15,10 @@ $.ajax({
         netValues = data.net_values;
         idName1 = 'grossandnet';
         idName2 = 'improvement';
-        diagLabels = ['leadership', 'management', 'legal'];
-        scores = [12, 20, 50];
-		improvedScores = [20, 80, 90];
+        diagLabels = ['Leadership', 'Organization', 'Product/Services',
+			'Sales & Marketing', 'Financial Management', 'Environmental'];
+        scores = [12, 20, 50, 40, 60, 25];
+		improvedScores = [20, 80, 95, 50, 65, 45];
 		revenues = [20, 30, 50];
 		expenditures = [-10, -20, -10];
 		cashFlow = [10, 10, 40];
@@ -25,13 +26,15 @@ $.ajax({
 		flowLabels = ['July', 'August', 'September'];
 		idName4 = 'sales';
 		sales = [75000, 60000, 100000];
+		sales_speedo = [110000, 10000];
 		salesLabels = ['Deborah', 'Danny', 'Eoghan'];
+		salesLabels_speedo = ['Actual', 'Projected'];
 		idName5 = 'speedo';
 		barChart(grossValues, netValues, idName1, labels);
         polarChart(scores, improvedScores, idName2, diagLabels);
         flowChart(revenues, expenditures, cashFlow, idName3, flowLabels);
         pieChart(sales, idName4, salesLabels);
-        speedoChart(sales, idName5, salesLabels);
+        speedoChart(sales_speedo, idName5, salesLabels_speedo);
     },
 	error: function(error_data){
 		console.log("error");
@@ -64,7 +67,11 @@ function barChart(gross, net, idName, labels){
 		    scales: {
 		        yAxes: [{
 		            ticks: {
-		                beginAtZero:true
+		                beginAtZero:true,
+						max: 100,
+						callback: function(value, index, values) {
+                        	return value + '%';
+                    	}
 		            },
 					gridLines: {
 		                display: false
@@ -99,7 +106,7 @@ function polarChart(scores, improvedScores, idName, labels){
 				borderColor: 'rgba(255, 159, 64, 1)',
 				borderWidth: 1
 			}]
-		}
+		},
 	});
 }
 function flowChart(revenues, expenditures, cashFlow, idName, labels){
@@ -186,7 +193,6 @@ function speedoChart(scores, idName, labels){
 				backgroundColor: [
 				    'rgba(54, 162, 235, 0.5)',
 					'rgba(54, 166, 35, 0.5)',
-					'rgba(255, 159, 64, 0.5)'
 					],
 				borderColor: 'rgba(247, 247, 247, 1)',
 				borderWidth: 8
@@ -208,7 +214,7 @@ function speedoChart(scores, idName, labels){
 			{% include 'snippets/side_buttons.html' %}
 		</div>
 		<div class="col-lg-10 col-sm-9">
-			<h1 class="h1 title"> <b>KPI - Chart.js demo</b> </h1>
+			<h1 class="h1 title"> <b>KPI Dashboard - demo</b> </h1>
 			<div class="col-sm-4">
 				<div class="content-list">
 					<h2 style="font-size:25px">Sales</h2>

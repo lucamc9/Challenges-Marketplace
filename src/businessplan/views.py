@@ -7,6 +7,7 @@ import os
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.http import HttpResponse, Http404
+from profiles.models import SMEProfile
 
 class BusinessPlanDetailView(DetailView):
 
@@ -68,14 +69,11 @@ class BusinessPlanUpdateView(LoginRequiredMixin, UpdateView):
 class InfoView(LoginRequiredMixin, TemplateView):
     template_name = 'info_view.html'
 
-    def get_queryset(self):
-        return BusinessPlan.objects.filter(user=self.request.user)
-
     def get_context_data(self, *args, **kwargs):
         context = super(InfoView, self).get_context_data(*args, **kwargs)
         slug = self.kwargs.get("slug")
         if slug:
-            user = BusinessPlan.objects.get(slug=slug).get_user()
+            user = SMEProfile.objects.get(slug=slug).get_user()
         else:
             user = self.request.user
         full_context = try_get_context(context, user)

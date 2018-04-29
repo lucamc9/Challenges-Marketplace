@@ -10,7 +10,11 @@
 			{% include 'snippets/side_buttons.html' %}
 		</div>
 		<div class="col-md-8 col-sm-7">
-			<h1 class="h1 title"> <b>My Information</b> </h1>
+			{% if smeprofile %}
+				<h1 class="h1 title"> <b>{{ smeprofile.get_company_name }}'s Information</b> </h1>
+			{% else %}
+				<h1 class="h1 title"> <b>{{ staffprofile.get_full_name }}'s Information</b> </h1>
+			{% endif %}
 			<p>Here you'll be able to find all the information we can keep and display for you to engage with investors.</p>
 		</div>
 	</div>
