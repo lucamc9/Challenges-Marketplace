@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-
 User = get_user_model()
 
 class LoginForm(forms.Form):
@@ -39,6 +38,7 @@ class RegisterForm(forms.ModelForm):
         user.active = False  # send confirmation email
         if commit:
             user.save()
+            user.send_activation_email()
         return user
 
 

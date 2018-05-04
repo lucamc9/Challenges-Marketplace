@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import logout
 from django.views.generic import TemplateView
-from accounts.views import RegisterView, LoginView
+from accounts.views import RegisterView, LoginView, activate_user_view
 from profiles.views import SearchSMEView, HomePageView
 from businessplan.views import InfoView
 from django.conf import settings
@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', logout, {'next_page': '/login/'}, name='logout'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
+    url(r'^activate/(?P<code>[a-z0-9].*)/$', activate_user_view, name='activate'),
     url(r'^info/(?P<slug>[\w-]+)/$', InfoView.as_view(), name='info'),
     url(r'^profile/', include('profiles.urls', namespace='profiles')),
     url(r'^businessplan/', include('businessplan.urls', namespace='businessplan')),

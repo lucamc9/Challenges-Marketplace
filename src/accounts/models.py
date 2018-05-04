@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from .utils import code_generator
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.urlresolvers import reverse
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, is_active=True, is_staff=False, is_admin=False,
@@ -39,7 +44,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
-    active = models.BooleanField(default=True)  # can login
+    active = models.BooleanField(default=False)  # can login
+    activation_key = models.CharField(max_length=120, blank=True, null=True)
     staff = models.BooleanField(default=False) # staff non-superuser
     admin = models.BooleanField(default=False) # superuser
     investor = models.BooleanField(default=False) # for investors
@@ -65,6 +71,30 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    def send_activation_email(self):
+        if not self.active:
+            self.activation_key = code_generator()  # 'somekey' #gen key
+            self.save()
+            # path_ = reverse()
+            path_ = reverse('activate', kwargs={"code": self.activation_key})
+            full_path = "https://challengesmarketplace.com" + path_
+            subject = 'Activate Account'
+            from_email = settings.DEFAULT_FROM_EMAIL
+            message = f'Activate your account here: {full_path}'
+            recipient_list = [self.email]
+            html_message = f'<p>Activate your account here: {full_path}</p>'
+            print(html_message)
+            # sent_mail = send_mail(
+            #     subject,
+            #     message,
+            #     from_email,
+            #     recipient_list,
+            #     fail_silently=False,
+            #     html_message=html_message)
+            sent_mail = False
+            return sent_mail
+
 
     @property
     def is_staff(self):

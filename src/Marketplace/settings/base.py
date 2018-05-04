@@ -25,6 +25,17 @@ SECRET_KEY = 'c5&(3++4u8a7^-r2*v_7jw9$!!9%l#1ut7hh*nlwj@w&eij=k$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+EMAIL_HOST = 'smtp.email-host-provider-domain.com'
+EMAIL_HOST_USER = 'yourusername@youremail.com'
+EMAIL_HOST_PASSWORD = 'your password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Your Name <you@email.com>'
+ADMINS = (
+    ('Lemac', 'you@email.com'),
+)
+MANAGERS = ADMINS
+
 ALLOWED_HOSTS = []
 
 

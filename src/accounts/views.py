@@ -4,11 +4,28 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.utils.http import is_safe_url
 from .forms import LoginForm, RegisterForm
+from accounts.models import User
+
+
+def activate_user_view(request, code=None, *args, **kwargs):
+    if code:
+        qs = User.objects.filter(activation_key=code)
+        if qs.exists() and qs.count() == 1:
+            account = qs.first()
+            if not account.active:
+                user_ = account.user
+                user_.is_active = True
+                user_.save()
+                account.active = True
+                account.activation_key = None
+                account.save()
+                return redirect("/login")
+    return redirect("/login")
 
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = "accounts/register.html"
-    success_url = '/profile/create'
+    success_url = '/profile/sme/create'
 
 class LoginView(FormView):
     form_class = LoginForm
