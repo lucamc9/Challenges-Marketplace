@@ -25,8 +25,28 @@ SECRET_KEY = 'c5&10++4u8TT7^-r2*v_7jK9$2!9%l#1ut7hh*nlwj@w&eij=k$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+EMAIL_HOST = 'smtp.email-host-provider-domain.com'
+EMAIL_HOST_USER = 'yourusername@youremail.com'
+EMAIL_HOST_PASSWORD = 'your password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Your Name <you@email.com>'
+ADMINS = (
+    ('Lemac', 'you@email.com'),
+)
+MANAGERS = ADMINS
+
 ALLOWED_HOSTS = []
 
+CORS_REPLACE_HTTPS_REFERER      = True
+HOST_SCHEME                     = "https://"
+SECURE_PROXY_SSL_HEADER         = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT             = True
+SESSION_COOKIE_SECURE           = True
+CSRF_COOKIE_SECURE              = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS  = True
+SECURE_HSTS_SECONDS             = 1000000
+SECURE_FRAME_DENY               = True
 
 # Application definition
 
@@ -37,7 +57,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'profiles',
+    'accounts',
+    'django_countries',
+    'djmoney',
+    'diagnostics',
+    'businessplan',
+    'widget_tweaks',
+    'dataroom',
+    'diligence',
+    'kpi',
+    'rest_framework'
 ]
+
+AUTH_USER_MODEL = 'accounts.User'  # changes the built-in user model to ours
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +83,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Marketplace.urls'
+LOGIN_URL = '/login/'
 
 TEMPLATES = [
     {
@@ -118,3 +152,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'Marketplace.authentication.ApiAuthentication',
+    )
+}
