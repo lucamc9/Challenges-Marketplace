@@ -82,7 +82,11 @@ function barChart(gross, net, idName, labels){
 		                display: false
 					}
 		        }]
-		    }
+		    },
+		    title: {
+		        display: true,
+				text: 'Profit Margins by Year'
+			}
 		}
 	});
 }
@@ -107,6 +111,12 @@ function polarChart(scores, improvedScores, idName, labels){
 				borderWidth: 1
 			}]
 		},
+		options: {
+		    title: {
+		        display: true,
+				text: 'Business Diagnostics'
+			}
+		}
 	});
 }
 function flowChart(revenues, expenditures, cashFlow, idName, labels){
@@ -157,7 +167,11 @@ function flowChart(revenues, expenditures, cashFlow, idName, labels){
 					},
 					stacked:true
 		        }]
-		    }
+		    },
+		    title: {
+		        display: true,
+				text: 'Cash flow by Month'
+			}
 		}
 	});
 }
@@ -178,6 +192,12 @@ function pieChart(scores, idName, labels){
 				borderColor: 'rgba(247, 247, 247, 1)',
 				borderWidth: 8
 			}]
+		},
+		options: {
+		    title: {
+		        display: true,
+				text: 'Sales Concentration by Customer'
+			}
 		}
 	});
 }
@@ -200,7 +220,11 @@ function speedoChart(scores, idName, labels){
 		},
 		options: {
 		    rotation: -Math.PI,
-		    circumference: Math.PI
+		    circumference: Math.PI,
+		    title: {
+		        display: true,
+				text: 'Sales Actual vs Forecast'
+			}
 		}
 	});
 }
