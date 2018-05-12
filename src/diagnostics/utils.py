@@ -93,7 +93,8 @@ def pickle_questions_db():
     pickle.dump(questions, open(path_to_pickle, 'wb'))
 
 def unpickle_questions_db():
-    path_to_pickle = '/home/lemac/Workspace/ChallenWide/Marketplace/src/static/diagnostics_db/Diagnostics_db.p'
+    # path_to_pickle = static('diagnostics_db/Diagnostics_db.p')
+    path_to_pickle = '/home/lemac/Workspace/ChallenWide/Challenges-Marketplace/src/static/diagnostics_db/Diagnostics_db.p'
     # path_to_pickle = static('diagnostics_db/Diagnostics_db.p')
     questions = pickle.load(open(path_to_pickle, 'rb'))
 

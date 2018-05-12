@@ -1,6 +1,6 @@
 import pandas as pd
 
-excel = pd.ExcelFile(r"/home/lemac/Workspace/ChallenWide/Marketplace/src/static/master_db/Diagnostic Data Room Merged.xlsx")
+excel = pd.ExcelFile(r"/home/lemac/Workspace/ChallenWide/Challenges-Marketplace/src/static/master_db/Diagnostic Data Room Merged.xlsx")
 database_qs = excel.parse(excel.sheet_names[1])
 
 def get_diligence():

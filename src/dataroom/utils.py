@@ -2,7 +2,7 @@ import pandas as pd
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from .models import AccordionFileModel
 
-dataroom_db = pd.read_csv('/home/lemac/Workspace/ChallenWide/Marketplace/src/static/dataroom_db/Dataroom_db.csv')
+dataroom_db = pd.read_csv('/home/lemac/Workspace/ChallenWide/Challenges-Marketplace/src/static/dataroom_db/Dataroom_db.csv')
 
 def get_dataroom_areas():
     return [str(x) for x in dataroom_db['Area'].unique()]
