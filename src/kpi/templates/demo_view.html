@@ -15,13 +15,13 @@ $.ajax({
         netValues = data.net_values;
         idName1 = 'grossandnet';
         idName2 = 'improvement';
-        diagLabels = ['Leadership', 'Organization', 'Product/Services',
-			'Sales & Marketing', 'Financial Management', 'Environmental'];
-        scores = [12, 20, 50, 40, 60, 25];
-		improvedScores = [20, 80, 95, 50, 65, 45];
-		revenues = [20, 30, 50];
-		expenditures = [-10, -20, -10];
-		cashFlow = [10, 10, 40];
+        diagLabels = ['Environmental', 'Leadership', 'Financial Management',
+			'Product/Services', 'Organization', 'Sales & Marketing'];
+        scores = data.diag_scores;
+		improvedScores = data.diag_scores_improv;
+		revenues = data.revenues;
+		expenditures = data.expenditures;
+		cashFlow = data.cash_flow;
 		idName3 = 'flow';
 		flowLabels = ['July', 'August', 'September'];
 		idName4 = 'sales';

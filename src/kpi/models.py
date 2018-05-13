@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from profiles.utils import sme_choices
 import datetime
-from .utils import get_month_choices
+from .utils import get_month_choices, extract_excel_data
 from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save, post_save
 from profiles.utils import unique_slug_generator
@@ -76,4 +76,13 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
+def extract_data(sender, instance, *args, **kwargs):
+    user = instance.get_user()
+    gross, net, year, revenues, expenditures, cash_flow, flow_month = extract_excel_data(instance.get_template())
+    graph = GraphData(user=user, gross=gross, net=net, year=year,
+                      revenues=revenues, expenditures=expenditures,
+                      cash_flow=cash_flow, flow_month=flow_month)
+    graph.save()
+
 pre_save.connect(pre_save_receiver, sender=GraphData)
+pre_save.connect(extract_data, sender=ExcelTemplate)

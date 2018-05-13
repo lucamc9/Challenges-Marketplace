@@ -106,7 +106,7 @@ class Diagnostics(models.Model):
         return int(self.total * 100 / self.get_real_total())
 
     def get_all_percents(self):
-        return [self.get_environmental_percent(), self.get_finance_percent(), self.get_leadership_percent(),
+        return [self.get_environmental_percent(), self.get_leadership_percent(), self.get_finance_percent(),
                 self.get_operations_percent(), self.get_organisation_percent(), self.get_sales_percent(),
                 self.get_total_percent()]
 

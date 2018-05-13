@@ -6,12 +6,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import GraphData, ExcelTemplate
 from accounts.models import User # temporary solution
-from .utils import get_graph_elements_flow, get_graph_elements_gn
+from .utils import get_graph_elements_flow, get_graph_elements_gn, get_diagnostics_scores
 from .forms import ExcelTemplateForm
 
 class KPIHomeView(LoginRequiredMixin, CreateView):
     template_name = 'home_view.html'
     form_class = ExcelTemplateForm
+    success_url = '#'
 
     def get_queryset(self):
         return ExcelTemplate.objects.filter(user=self.request.user)
@@ -55,6 +56,7 @@ def get_data(request, *args, **kwargs):
     kpis = GraphData.objects.filter(user=request.user)
     years, gross_values, net_values = get_graph_elements_gn(kpis)
     revenues, expenditures, cash_flow, flow_labels = get_graph_elements_flow(kpis)
+    diag_scores, diag_scores_improv = get_diagnostics_scores(request.user)
     data = {
         "labels": years,
         "gross_values": gross_values,
@@ -62,7 +64,9 @@ def get_data(request, *args, **kwargs):
         "revenues": revenues,
         "expenditures": expenditures,
         "cash_flow": cash_flow,
-        "flow_labels": flow_labels
+        "flow_labels": flow_labels,
+        "diag_scores": diag_scores,
+        "diag_scores_improv": diag_scores_improv
     }
     return JsonResponse(data)
 

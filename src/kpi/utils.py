@@ -1,3 +1,6 @@
+import pandas as pd
+from diagnostics.models import Diagnostics
+
 def get_graph_elements_gn(kpis):
     years = []
     gross_values = []
@@ -34,3 +37,23 @@ def get_month_choices():
                ('November', 'November'),
                ('December', 'December'))
     return choices
+
+def extract_excel_data(template):
+    # excel = pd.ExcelFile(template)
+    # input_sheet = excel.parse(excel.sheet_names[3])
+    gross = 10
+    net = 10
+    year = 2018
+    revenues = 10
+    expenditures = 10
+    cash_flow = 10
+    flow_month = 'April'
+    return gross, net, year, revenues, expenditures, cash_flow, flow_month
+
+def get_diagnostics_scores(user):
+    first_diag = Diagnostics.objects.filter(user=user).last()
+    current_diag = Diagnostics.objects.filter(user=user)[0]
+    diag_scores_improv = current_diag.get_all_percents()
+    diag_scores = first_diag.get_all_percents()
+
+    return diag_scores[:-1], diag_scores_improv[:-1]
