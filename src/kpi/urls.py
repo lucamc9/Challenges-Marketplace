@@ -1,12 +1,15 @@
 from django.conf.urls import url
 from .views import (
     KPIHomeView,
-    KPIDemoView,
+    KPIFollowerView,
+    KPIBusinessView,
     get_data
 )
 
 urlpatterns = [
     url(r'^$', KPIHomeView.as_view(), name='home'),
-    url(r'^(?P<slug>[\w-]+)/$', KPIDemoView.as_view(), name='detail'),
-    url(r'^(?P<slug>[\w-]+)/api/data/$', get_data, name='api-data'),
+    url(r'^follower/(?P<slug>[\w-]+)/$', KPIFollowerView.as_view(), name='detail-follower'),
+    url(r'^business/(?P<slug>[\w-]+)/$', KPIBusinessView.as_view(), name='detail-business'),
+    url(r'^follower/(?P<slug>[\w-]+)/api/data/$', get_data, name='api-f-data'),
+    url(r'^business/(?P<slug>[\w-]+)/api/data/$', get_data, name='api-b-data'),
 ]

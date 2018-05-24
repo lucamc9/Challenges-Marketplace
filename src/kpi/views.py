@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import GraphData, ExcelTemplate
+from .models import GraphData_follower, ExcelTemplate
 from accounts.models import User # temporary solution
 from .utils import get_graph_elements_flow, get_graph_elements_gn, get_diagnostics_scores
 from .forms import ExcelTemplateForm
@@ -26,20 +26,20 @@ class KPIHomeView(LoginRequiredMixin, CreateView):
         context = super(KPIHomeView, self).get_context_data(*args, **kwargs)
         slug = self.kwargs.get("slug")
         if slug:
-            user = GraphData.objects.get(slug=slug).get_user()
+            user = GraphData_follower.objects.get(slug=slug).get_user()
         else:
             user = self.request.user
         full_context = try_get_context(context, user)
         return full_context
 
-class KPIDemoView(LoginRequiredMixin, TemplateView):
-    template_name = 'demo_view.html'
+class KPIFollowerView(LoginRequiredMixin, TemplateView):
+    template_name = 'follower_view.html'
 
     def get_context_data(self, *args, **kwargs):
-        context = super(KPIDemoView, self).get_context_data(*args, **kwargs)
+        context = super(KPIFollowerView, self).get_context_data(*args, **kwargs)
         slug = self.kwargs.get("slug")
         if slug:
-            user = GraphData.objects.get(slug=slug).get_user()
+            user = GraphData_follower.objects.get(slug=slug).get_user()
         else:
             user = self.request.user
         full_context = try_get_context(context, user)
@@ -51,9 +51,22 @@ class KPIDemoView(LoginRequiredMixin, TemplateView):
     #     print(response['X_EMAIL'])
     #     return response
 
+class KPIBusinessView(LoginRequiredMixin, TemplateView):
+    template_name = 'business_view.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(KPIBusinessView, self).get_context_data(*args, **kwargs)
+        slug = self.kwargs.get("slug")
+        if slug:
+            user = GraphData_follower.objects.get(slug=slug).get_user()
+        else:
+            user = self.request.user
+        full_context = try_get_context(context, user)
+        return full_context
+
 
 def get_data(request, *args, **kwargs):
-    kpis = GraphData.objects.filter(user=request.user)
+    kpis = GraphData_follower.objects.filter(user=request.user)
     years, gross_values, net_values = get_graph_elements_gn(kpis)
     revenues, expenditures, cash_flow, flow_labels = get_graph_elements_flow(kpis)
     diag_scores, diag_scores_improv = get_diagnostics_scores(request.user)

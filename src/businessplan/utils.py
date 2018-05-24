@@ -3,7 +3,7 @@ from diagnostics.models import Diagnostics
 from profiles.models import SMEProfile, StaffProfile
 from dataroom.models import Accordion
 from diligence.models import DiligenceRoom
-from kpi.models import GraphData
+from kpi.models import GraphData_follower, ExcelTemplate
 
 # def try_get_context(context, slug, request_user):
 #     # Get full context
@@ -82,7 +82,7 @@ def try_get_context(context, request_user):
     except:
         context['diligence'] = None
     try:
-        graph_data = GraphData.objects.filter(user=request_user)[0]
+        graph_data = ExcelTemplate.objects.filter(user=request_user)[0]
         context['kpi'] = graph_data
     except:
         context['kpi'] = None

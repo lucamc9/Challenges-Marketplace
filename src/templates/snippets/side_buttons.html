@@ -1,7 +1,7 @@
 <div class="nav-buttons" style="margin-top:80px;">
     {% if kpi is not None %}
-        <form action="{{ kpi.get_absolute_url }}">
-            <button class="button standard" type="submit">KPI Dashboard</button>
+        <form action="{% url 'kpi:detail-follower' slug=kpi.slug %}">
+            <button class="button standard" type="submit">Follower Dashboard</button>
         </form>
      <div class="progress" style="margin-top:-55px; margin-bottom: 40px;">
         <div class="progress-bar" role="progressbar" aria-valuenow="50"
@@ -10,7 +10,21 @@
       </div>
     {% else %}
         <form action="/kpi/">
-            <button class="button standard" style="color: #B0AFAF;" type="submit">KPI Dashboard</button>
+            <button class="button standard" style="color: #B0AFAF;" type="submit">Follower Dashboard</button>
+        </form>
+    {% endif %}
+    {% if kpi is not None %}
+        <form action="{% url 'kpi:detail-business' slug=kpi.slug %}">
+            <button class="button standard" type="submit">Business Dashboard</button>
+        </form>
+     <div class="progress" style="margin-top:-55px; margin-bottom: 40px;">
+        <div class="progress-bar" role="progressbar" aria-valuenow="50"
+             aria-valuemin="0" aria-valuemax="100" style="width:100%; background-image: none; background-color: #B0AFAF;">
+        </div>
+      </div>
+    {% else %}
+        <form action="/kpi/">
+            <button class="button standard" style="color: #B0AFAF;" type="submit">Business Dashboard</button>
         </form>
     {% endif %}
     {% if bp is not None %}

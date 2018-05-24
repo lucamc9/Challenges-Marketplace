@@ -9,7 +9,7 @@ from profiles.utils import unique_slug_generator
 
 User = settings.AUTH_USER_MODEL
 
-class GraphData(models.Model):
+class GraphData_follower(models.Model):
     _, _, YEAR_CHOICES, _, _ = sme_choices()
     MONTHS = get_month_choices()
     user = models.ForeignKey(User)
@@ -25,7 +25,51 @@ class GraphData(models.Model):
     flow_month = models.CharField(max_length=50, choices=MONTHS)
 
     def get_absolute_url(self):
-        return reverse('kpi:detail', kwargs={'slug': self.slug})
+        return reverse('kpi:detail-follower', kwargs={'slug': self.slug})
+
+    class Meta:
+        ordering = ['-updated', '-timestamp']
+
+    def get_user(self):
+        return self.user
+
+    def get_gross(self):
+        return self.gross
+
+    def get_net(self):
+        return self.net
+
+    def get_year(self):
+        return self.year
+
+    def get_revenues(self):
+        return self.revenues
+
+    def get_expenditures(self):
+        return self.expenditures
+
+    def get_cash_flow(self):
+        return self.cash_flow
+
+    def get_flow_month(self):
+        return self.flow_month
+
+class GraphData_business(models.Model):
+    _, _, YEAR_CHOICES, _, _ = sme_choices()
+    MONTHS = get_month_choices()
+    user = models.ForeignKey(User)
+    slug = models.SlugField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    year = models.IntegerField(choices=YEAR_CHOICES, default=datetime.datetime.now().year)
+    flow_month = models.CharField(max_length=50, choices=MONTHS)
+    cash = models.IntegerField(null=True, blank=True)
+    receivable = models.IntegerField(null=True, blank=True)
+    payable = models.IntegerField(null=True, blank=True)
+
+
+    def get_absolute_url(self):
+        return reverse('kpi:detail-business', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['-updated', '-timestamp']
@@ -59,6 +103,7 @@ class ExcelTemplate(models.Model):
     template = models.FileField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('kpi:demo')
@@ -79,10 +124,10 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
 def extract_data(sender, instance, *args, **kwargs):
     user = instance.get_user()
     gross, net, year, revenues, expenditures, cash_flow, flow_month = extract_excel_data(instance.get_template())
-    graph = GraphData(user=user, gross=gross, net=net, year=year,
-                      revenues=revenues, expenditures=expenditures,
-                      cash_flow=cash_flow, flow_month=flow_month)
+    graph = GraphData_follower(user=user, gross=gross, net=net, year=year,
+                               revenues=revenues, expenditures=expenditures,
+                               cash_flow=cash_flow, flow_month=flow_month)
     graph.save()
 
-pre_save.connect(pre_save_receiver, sender=GraphData)
+pre_save.connect(pre_save_receiver, sender=GraphData_follower)
 pre_save.connect(extract_data, sender=ExcelTemplate)
