@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import GraphData_follower, ExcelTemplate
 from accounts.models import User # temporary solution
-from .utils import get_graph_elements_flow, get_graph_elements_gn, get_diagnostics_scores
+from .utils import get_graph_elements_flow, get_graph_elements_gn, get_diagnostics_scores, get_follower_graph_data
 from .forms import ExcelTemplateForm
 
 class KPIHomeView(LoginRequiredMixin, CreateView):
@@ -82,6 +82,37 @@ def get_data(request, *args, **kwargs):
         "diag_scores_improv": diag_scores_improv
     }
     return JsonResponse(data)
+
+def get_data_business(request, *args, **kwargs):
+    kpis = GraphData_follower.objects.filter(user=request.user)
+    years, gross_values, net_values = get_graph_elements_gn(kpis)
+    revenues, expenditures, cash_flow, flow_labels = get_graph_elements_flow(kpis)
+    diag_scores, diag_scores_improv = get_diagnostics_scores(request.user)
+    data = {
+        "labels": years,
+        "gross_values": gross_values,
+        "net_values": net_values,
+        "revenues": revenues,
+        "expenditures": expenditures,
+        "cash_flow": cash_flow,
+        "flow_labels": flow_labels,
+        "diag_scores": diag_scores,
+        "diag_scores_improv": diag_scores_improv
+    }
+    return JsonResponse(data)
+
+# Version scraping excel
+# def get_data_follower_excel(request, *args, **kwargs):
+#     yearly_excel = Yearly_Excel.objects.filter(user=request.user)[0]
+#     monthly_excel = Monthly_Excel.objects.filter(user=request.user)[0]
+#     data = get_follower_graph_data(yearly_excel, monthly_excel)
+#     return JsonResponse(data)
+#
+# def get_data_business_excel(request, *args, **kwargs):
+#     yearly_excel = Yearly_Excel.objects.filter(user=request.user)[0]
+#     monthly_excel = Monthly_Excel.objects.filter(user=request.user)[0]
+#     data = get_business_graph_data(yearly_excel, monthly_excel)
+#     return JsonResponse(data)
 
 # Not using REST for now: this project has custom user and can't get the email from headers
 # class ChartData(APIView):

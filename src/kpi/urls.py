@@ -3,7 +3,8 @@ from .views import (
     KPIHomeView,
     KPIFollowerView,
     KPIBusinessView,
-    get_data
+    get_data,
+    get_data_business
 )
 
 urlpatterns = [
